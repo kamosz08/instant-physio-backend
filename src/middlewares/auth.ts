@@ -1,9 +1,9 @@
-import passport from 'passport';
-import { Strategy, ExtractJwt } from "passport-jwt";
+import passport from 'passport'
+import { Strategy, ExtractJwt } from 'passport-jwt'
 
-import {usersService} from "../services/users";
+import { usersService } from '../services/users'
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET } = process.env
 
 // Create a new instance of the JWT Passport.js strategy
 const strategy = new Strategy(
@@ -21,37 +21,34 @@ const strategy = new Strategy(
       // jwtPayload contains the decoded JWT payload,
       // which includes the user's id
       // Find that user in the database
-      const user = await usersService.findById({ id: jwtPayload.id });
+      const user = await usersService.findById({ id: jwtPayload.id })
 
       if (!user) {
-        const err = new Error("User not found");
+        const err = new Error('User not found')
         // err.statusCode = 404;
-        throw err;
+        throw err
       }
 
       // done is an error-first callback with signature done(error, user, info)
       // pass the found user to the route handler
-      done(null, user);
+      done(null, user)
     } catch (error) {
-      done(error);
+      done(error)
     }
   }
-);
+)
 
 // Register the strategy configured above so that Passport.js can use it authentication
-passport.use(strategy);
+passport.use(strategy)
 
 // A middleware for initializing passport
 const initialize = () => {
-  return passport.initialize();
-};
+  return passport.initialize()
+}
 
 // Add this middleware to privileged routes later on
 const authenticate = () => {
-  return passport.authenticate("jwt", { session: false });
-};
+  return passport.authenticate('jwt', { session: false })
+}
 
-export {
-  initialize,
-  authenticate,
-};
+export { initialize, authenticate }

@@ -1,40 +1,43 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import * as dotenv from 'dotenv'
+dotenv.config()
 
-import express, { Request, Response } from "express";
-import bodyParser from 'body-parser';
-import cors from 'cors';
+import express, { Request, Response } from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
 // import router from './routes';
-import {db} from './db';
-import { initialize } from './middlewares/auth';
-import { usersService } from './services/users';
-import usersRouter from './routers/users';
+import { db } from './db'
+import { initialize } from './middlewares/auth'
+import { usersService } from './services/users'
+import usersRouter from './routers/users'
 
-const PORT = 3000;
+const PORT = 3000
 
-const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+const app = express()
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-app.use(cors());
+app.use(cors())
 
 app.use((req, res, next) => {
-  const { method, path } = req;
+  const { method, path } = req
   console.log(
     `New request to: ${method} ${path} at ${new Date().toISOString()}`
-  );
-  next();
-});
+  )
+  next()
+})
 
-app.use(initialize());
+app.use(initialize())
 
-db("users").first().then(res=>{
-  console.log(res);
-
-}, err=>{
-  console.log(err);
-  
-});
+db('users')
+  .first()
+  .then(
+    (res) => {
+      console.log(res)
+    },
+    (err) => {
+      console.log(err)
+    }
+  )
 
 // usersService.create({email: 'test@test.test', name: "test", password: "test"}).then(res=>{
 //   console.log(res);
@@ -50,13 +53,12 @@ db("users").first().then(res=>{
 //   // console.log('The solution is: ', results[0].solution);
 //   console.log(results);
 // });
- 
+
 // connection.end();
 
 // app.use("/", router)
-app.use("/api/v1/users", usersRouter);
-
+app.use('/api/v1/users', usersRouter)
 
 app.listen(PORT, (): void => {
-  console.log("Server Running!");
-});
+  console.log('Server Running!')
+})

@@ -32,7 +32,7 @@ const create = async ({ email, name, password }: Omit<User, 'id'>) => {
     password: await bcrypt.hash(password, 10),
   }
 
-  const user = await db<User>('users').insert(newUser, ['id'])
+  const user = await db<User>('user').insert(newUser, ['id'])
 
   const token = jwt.sign({ id: user[0] }, process.env.JWT_SECRET as string, {
     expiresIn: 24 * 60 * 60,
@@ -42,11 +42,11 @@ const create = async ({ email, name, password }: Omit<User, 'id'>) => {
 }
 
 const find = async ({ email }: { email: string }) => {
-  return db<User>('users').where('email', email).first()
+  return db<User>('user').where('email', email).first()
 }
 
 const findById = async ({ id }: { id: string }) => {
-  return db<User>('users').where('id', id).first()
+  return db<User>('user').where('id', id).first()
 }
 
 export const usersService = {

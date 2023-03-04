@@ -1,23 +1,16 @@
 import { db } from '../db'
 import { Specialization } from '../types/db'
 
-const getAll = () => db<Specialization>('specializations')
+const getAll = () => db<Specialization>('specialization')
 
 // const get = async (id) => {
 //   const recipes = await getAll();
 //   return recipes.find((recipe) => recipe.id === parseInt(id));
 // };
 
-// const save = async (recipe) => {
-//   const recipes = await getAll();
-
-//   recipe.id = recipes.length + 1; // Not a robust incrementor mechanism; don't use in production!
-//   recipes.push(recipe);
-
-//   await fs.writeFile(recipesFilePath, JSON.stringify(recipes));
-
-//   return recipe;
-// };
+const save = async (specialization: Omit<Specialization, 'id'>) => {
+  await db<Specialization>('specialization').insert(specialization)
+}
 
 // const update = async (id, updated) => {
 //   const recipes = await getAll();
@@ -47,7 +40,7 @@ const getAll = () => db<Specialization>('specializations')
 export const specializationsService = {
   getAll,
   // get,
-  // save,
+  save,
   // update,
   // remove,
 }

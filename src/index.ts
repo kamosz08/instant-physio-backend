@@ -9,35 +9,36 @@ import { db } from './db'
 import { initialize } from './middlewares/auth'
 import { usersService } from './services/users'
 import usersRouter from './routers/users'
+import specializationsRouter from './routers/specializations'
+import { logger } from './middlewares/logger'
+import { errorHandler } from './middlewares/errorHandler'
 
 const PORT = 3000
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
 app.use(cors())
+app.use(logger)
+app.use(initialize())
+app.use('/api/v1/users', usersRouter)
+app.use('/api/v1/specializations', specializationsRouter)
+app.use(errorHandler)
 
-app.use((req, res, next) => {
-  const { method, path } = req
-  console.log(
-    `New request to: ${method} ${path} at ${new Date().toISOString()}`
-  )
-  next()
+app.listen(PORT, (): void => {
+  console.log('Server Running!')
 })
 
-app.use(initialize())
-
-db('users')
-  .first()
-  .then(
-    (res) => {
-      console.log(res)
-    },
-    (err) => {
-      console.log(err)
-    }
-  )
+// db('user')
+//   .first()
+//   .then(
+//     (res) => {
+//       console.log(res)
+//     },
+//     (err) => {
+//       console.log(err)
+//     }
+//   )
 
 // usersService.create({email: 'test@test.test', name: "test", password: "test"}).then(res=>{
 //   console.log(res);
@@ -57,8 +58,3 @@ db('users')
 // connection.end();
 
 // app.use("/", router)
-app.use('/api/v1/users', usersRouter)
-
-app.listen(PORT, (): void => {
-  console.log('Server Running!')
-})

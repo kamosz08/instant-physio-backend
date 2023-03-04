@@ -1,6 +1,5 @@
 
 TODO: 
-- seed database
 - bootstrap and migration (give up mysql workbench?)
 - Follow guide and make specializations resource
 - Error handling! (don't show stack trace, some general handler?)

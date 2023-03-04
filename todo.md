@@ -1,8 +1,11 @@
 
 TODO: 
-1. Error handling! (don't show stack trace, some general handler?)
-2. Model DB
-3. !!Create basic MVP and setup deploy!! Don't wait on that
+- seed database
+- bootstrap and migration (give up mysql workbench?)
+- Follow guide and make specializations resource
+- Error handling! (don't show stack trace, some general handler?)
+- !!Create basic MVP and setup deploy!! Don't wait on that
+- Seed/migration DB research 
 
 instant psychotherapy
 

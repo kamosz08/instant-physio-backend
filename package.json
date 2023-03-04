@@ -8,7 +8,10 @@
     "build": "tsc -p .",
     "dev": "nodemon ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "inite": "eslint --init"
+    "migrate": "knex migrate:latest",
+    "make:migration": "knex migrate:make",
+    "make:seed": "knex seed:make",
+    "seed": "knex seed:run"
   },
   "keywords": [],
   "author": "",

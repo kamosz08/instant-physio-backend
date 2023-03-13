@@ -2,10 +2,8 @@
 TODO: 
 - run entire app on docker, run migrate and seed on docker startup?
 - add authoritaztion, allow only admin to create specializations
-- Follow guide and make specializations resource
-- Error handling! (don't show stack trace, some general handler?)
+- Follow guide and complete specializations resource
 - !!Create basic MVP and setup deploy!! Don't wait on that
-- Seed/migration DB research 
 
 instant psychotherapy
 

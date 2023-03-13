@@ -1,13 +1,9 @@
 import express from 'express'
 import { specializationsController } from '../controllers/specializations'
-import { usersService } from '../services/users'
+import { authenticate } from '../middlewares/auth'
 const specializationsRouter = express.Router()
 
 specializationsRouter.get('/', specializationsController.getAll)
-specializationsRouter.post(
-  '/',
-  // usersService.authenticate(),
-  specializationsController.save
-)
+specializationsRouter.post('/', authenticate(), specializationsController.save)
 
 export default specializationsRouter

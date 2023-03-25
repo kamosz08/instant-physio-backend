@@ -26,7 +26,7 @@ app.use('/api/v1/specializations', specializationsRouter)
 app.use(errorHandler)
 
 app.listen(PORT, (): void => {
-  console.log('Server Running!')
+  console.log('Server Running!!')
 })
 
 // db('user')

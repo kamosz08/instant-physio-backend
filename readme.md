@@ -1,4 +1,1 @@
-1. Start docker-compose up -d
-2. Run ```npm run migrate```
-3. Run ```npm run seed```
-4. Run ```npm run dev```
+1. To start app and database run docker-compose up

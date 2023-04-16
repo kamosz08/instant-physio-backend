@@ -1,7 +1,6 @@
 
 TODO: 
-- run entire app on docker, run migrate and seed on docker startup?
-- add authoritaztion, allow only admin to create specializations
+- allow only specialist to create specializations
 
 instant psychotherapy
 
@@ -21,3 +20,5 @@ Features:
 - Attending meeting in app
 - Chat in app
 
+
+https://dbdiagram.io/d/63ff3088296d97641d849986

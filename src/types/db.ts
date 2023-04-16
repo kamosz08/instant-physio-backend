@@ -3,6 +3,7 @@ export interface User {
   email: string
   name: string
   password: string
+  type: 'specialist' | 'user'
 }
 
 export interface Specialization {

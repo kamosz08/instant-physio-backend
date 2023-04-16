@@ -1,3 +1,4 @@
+import { RequestHandler } from 'express'
 import passport from 'passport'
 import { Strategy, ExtractJwt } from 'passport-jwt'
 
@@ -51,4 +52,11 @@ const authenticate = () => {
   return passport.authenticate('jwt', { session: false })
 }
 
-export { initialize, authenticate }
+const authorize: RequestHandler = (req, res, next) => {
+  if (req.user?.type !== 'specialist') {
+    next(new Error('This operation is not allowed'))
+  }
+  next()
+}
+
+export { initialize, authenticate, authorize }

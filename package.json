@@ -12,7 +12,7 @@
     "make:migration": "knex migrate:make",
     "make:seed": "knex seed:make",
     "seed": "knex seed:run",
-    "start:dev": "npm run migrate & npm run seed & npm run dev"
+    "start:dev": "npm run migrate & npm run dev"
   },
   "keywords": [],
   "author": "",

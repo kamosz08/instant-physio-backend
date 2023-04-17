@@ -25,11 +25,12 @@ const authenticate = async ({
   return { token }
 }
 
-const create = async ({ email, name, password }: Omit<User, 'id'>) => {
+const create = async ({ email, name, password, type }: Omit<User, 'id'>) => {
   const newUser = {
     email,
     name,
     password: await bcrypt.hash(password, 10),
+    type,
   }
 
   const user = await db<User>('user').insert(newUser, ['id'])

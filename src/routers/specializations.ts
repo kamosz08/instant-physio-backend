@@ -5,11 +5,15 @@ const specializationsRouter = express.Router()
 
 // specializationsRouter.get(
 //   '/',
-//   authenticate(),
 //   authorize,
 //   specializationsController.getAll
 // )
 specializationsRouter.get('/', specializationsController.getAll) //TODO: uncomment above and delete this line
-specializationsRouter.post('/', authenticate(), specializationsController.save)
+specializationsRouter.post(
+  '/',
+  authenticate(),
+  authorize('specialist'),
+  specializationsController.save
+)
 
 export default specializationsRouter

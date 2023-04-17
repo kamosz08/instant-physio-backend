@@ -9,7 +9,7 @@ const config: { [key: string]: Knex.Config } = {
       host: process.env.DB_URL,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      database: 'instantpsycho',
+      database: 'instantphysio',
     },
     migrations: {
       directory: './data/migrations',

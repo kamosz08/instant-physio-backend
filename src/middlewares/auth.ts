@@ -3,6 +3,7 @@ import passport from 'passport'
 import { Strategy, ExtractJwt } from 'passport-jwt'
 
 import { usersService } from '../services/users'
+import { User } from '../types/db'
 
 const { JWT_SECRET } = process.env
 
@@ -52,11 +53,12 @@ const authenticate = () => {
   return passport.authenticate('jwt', { session: false })
 }
 
-const authorize: RequestHandler = (req, res, next) => {
-  if (req.user?.type !== 'specialist') {
-    next(new Error('This operation is not allowed'))
+const authorize: (userType: Pick<User, 'type'>['type']) => RequestHandler =
+  (userType) => (req, res, next) => {
+    if (req.user.type !== userType) {
+      next(new Error('This operation is not allowed'))
+    }
+    next()
   }
-  next()
-}
 
 export { initialize, authenticate, authorize }

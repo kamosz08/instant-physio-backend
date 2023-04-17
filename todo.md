@@ -2,7 +2,7 @@
 TODO: 
 - allow only specialist to create specializations
 
-instant psychotherapy
+instantphysio
 
 Features:
 - User can log in/register as specialist or patient 

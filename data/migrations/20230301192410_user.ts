@@ -5,7 +5,13 @@ export async function up(knex: Knex): Promise<void> {
     table.increments('id', { primaryKey: true })
     table.string('name').notNullable()
     table.string('email').notNullable().index()
-    table.enum('type', ['specialist', 'user']).defaultTo('user').notNullable()
+    table
+      .enum('type', ['specialist', 'user', 'admin'])
+      .defaultTo('user')
+      .notNullable()
+    table
+      .enum('status', ['active', 'inactive', 'waiting_approval', 'denied'])
+      .notNullable()
     table.string('password').notNullable()
     table.timestamp('created_at').defaultTo(knex.raw('now()'))
   })

@@ -3,7 +3,8 @@ export interface User {
   email: string
   name: string
   password: string
-  type: 'specialist' | 'user'
+  type: 'specialist' | 'user' | 'admin'
+  status: 'active' | 'waiting_approval' | 'denied' | 'inactive'
 }
 
 export interface Specialization {

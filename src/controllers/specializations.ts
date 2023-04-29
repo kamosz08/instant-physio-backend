@@ -1,6 +1,8 @@
+import { validate } from 'class-validator'
 import { RequestHandler } from 'express'
 import { specializationsService } from '../services/specializations'
 import { Specialization } from '../types/db'
+import { SpecializationCreateAPI } from '../types/models/specialization'
 
 // const recipeExists = async (req, res, next) => {
 //   const recipe = await service.get(req.params.id);
@@ -34,10 +36,14 @@ const getAll: RequestHandler = async (req, res, next) => {
 const save: RequestHandler = async (req, res, next) => {
   try {
     const { name, description } = req.body as Omit<Specialization, 'id'>
+    const newSpecialization = new SpecializationCreateAPI()
+    newSpecialization.name = name
+    newSpecialization.description = description
 
-    const newSpecialization = {
-      name,
-      description,
+    const errors = await validate(newSpecialization)
+    if (errors.length) {
+      res.status(400)
+      res.send({ errors })
     }
 
     res

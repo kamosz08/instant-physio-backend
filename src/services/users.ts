@@ -25,12 +25,19 @@ const authenticate = async ({
   return { token }
 }
 
-const create = async ({ email, name, password, type }: Omit<User, 'id'>) => {
-  const newUser = {
+const create = async ({
+  email,
+  name,
+  password,
+  type,
+  status,
+}: Omit<User, 'id'>) => {
+  const newUser: Omit<User, 'id'> = {
     email,
     name,
     password: await bcrypt.hash(password, 10),
     type,
+    status,
   }
 
   const user = await db<User>('user').insert(newUser, ['id'])
@@ -50,9 +57,17 @@ const findById = async ({ id }: { id: string }) => {
   return db<User>('user').where('id', id).first()
 }
 
+const update = async ({ id }: { id: string }, values: Partial<User>) => {
+  return db<User>('user').where('id', id).update(values)
+}
+
+const getAll = () => db<User>('user')
+
 export const usersService = {
   authenticate,
   create,
   find,
   findById,
+  update,
+  getAll,
 }

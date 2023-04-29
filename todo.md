@@ -1,6 +1,6 @@
 
 TODO: 
-- allow only specialist to create specializations
+
 
 instantphysio
 

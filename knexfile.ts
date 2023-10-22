@@ -9,7 +9,7 @@ const config: { [key: string]: Knex.Config } = {
       host: process.env.DB_URL,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      database: 'instantphysio',
+      database: process.env.DB_NAME,
     },
     migrations: {
       directory: './data/migrations',
@@ -17,6 +17,7 @@ const config: { [key: string]: Knex.Config } = {
     seeds: { directory: './data/seeds' },
   },
 
+  //TODO: database staging and production configurations go here
   // staging: {
   //   client: "postgresql",
   //   connection: {

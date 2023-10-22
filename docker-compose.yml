@@ -1,0 +1,31 @@
+version: "3.8"
+
+services: 
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 3000:3000
+    volumes: 
+      - .:/app
+      - '/app/node_modules'
+    depends_on: 
+      - mysql_server
+    # command: ["./wait-for-it.sh", "mysql_server:3306 -t 20"]
+    command: sh -c './wait-for-it.sh -t 0 mysql_server:3306 -- npm run start:dev'
+
+  
+  mysql_server:
+    image: mysql:8.1
+    ports:
+      - "3306"
+    environment: 
+      - MYSQL_DATABASE=$DB_NAME
+      - MYSQL_USER=$DB_USER
+      - MYSQL_PASSWORD=$DB_PASSWORD
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+    #   timeout: 20s
+    #   retries: 10

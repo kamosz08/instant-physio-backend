@@ -18,6 +18,12 @@ const authenticate = async ({
     throw new Error('Invalid password')
   }
 
+  const isActive = user.status === 'active';
+  
+  if(!isActive){
+    throw new Error('This account is not active')
+  }
+
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
     expiresIn: 24 * 60 * 60,
   })

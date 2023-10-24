@@ -15,11 +15,12 @@ const getNewUserStatus = (type: User['type']): User['status'] => {
 
 const handleSignup: RequestHandler = async (req, res, next) => {
   try {
-    const { name, email, password, type } = req.body
+    const { name, email, password, type, description = null } = req.body
 
     const userNew = new UserCreateAPI()
     userNew.name = name
     userNew.email = email
+    userNew.description = description
     userNew.password = password
     userNew.type = type
     userNew.status = getNewUserStatus(type)

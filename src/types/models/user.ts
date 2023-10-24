@@ -1,4 +1,10 @@
-import { IsEmail, IsIn, IsNumberString, IsString } from 'class-validator'
+import {
+  IsEmail,
+  IsIn,
+  IsNumberString,
+  IsString,
+  ValidateIf,
+} from 'class-validator'
 import { User } from '../db'
 
 export class UserCreateAPI implements Omit<User, 'id'> {
@@ -10,6 +16,10 @@ export class UserCreateAPI implements Omit<User, 'id'> {
 
   @IsString()
   password: string
+
+  @ValidateIf((object, value) => object.type === 'specialist')
+  @IsString()
+  description: string | null
 
   @IsIn(['specialist', 'user', 'admin'])
   type: 'specialist' | 'user' | 'admin'

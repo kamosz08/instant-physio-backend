@@ -18,9 +18,9 @@ const authenticate = async ({
     throw new Error('Invalid password')
   }
 
-  const isActive = user.status === 'active';
-  
-  if(!isActive){
+  const isActive = user.status === 'active'
+
+  if (!isActive) {
     throw new Error('This account is not active')
   }
 
@@ -37,6 +37,7 @@ const create = async ({
   password,
   type,
   status,
+  description,
 }: Omit<User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
     email,
@@ -44,6 +45,7 @@ const create = async ({
     password: await bcrypt.hash(password, 10),
     type,
     status,
+    description,
   }
 
   const user = await db<User>('user').insert(newUser, ['id'])

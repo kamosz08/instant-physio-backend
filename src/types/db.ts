@@ -1,6 +1,7 @@
 export interface User {
   id: number
   email: string
+  description: string | null
   name: string
   password: string
   type: 'specialist' | 'user' | 'admin'

@@ -71,6 +71,8 @@ const update = async ({ id }: { id: string }, values: Partial<User>) => {
 
 const getAll = () => db<User>('user')
 
+const getSpecialists = () => db<User>('user').where('type', 'specialist')
+
 export const usersService = {
   authenticate,
   create,
@@ -78,4 +80,5 @@ export const usersService = {
   findById,
   update,
   getAll,
+  getSpecialists,
 }

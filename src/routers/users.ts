@@ -5,7 +5,8 @@ const usersRouter = express.Router()
 
 usersRouter.post('/signup', usersController.handleSignup)
 usersRouter.post('/login', usersController.handleLogin)
-usersRouter.get('/', authenticate(), usersController.getAll)
+usersRouter.get('/', authenticate(), authorize('admin'), usersController.getAll)
+usersRouter.get('/specialists', authenticate(), usersController.getSpecialists)
 usersRouter.post(
   '/approve',
   authenticate(),

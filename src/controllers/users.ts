@@ -100,9 +100,18 @@ const getAll: RequestHandler = async (req, res, next) => {
   }
 }
 
+const getSpecialists: RequestHandler = async (req, res, next) => {
+  try {
+    res.json({ data: await usersService.getSpecialists() })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const usersController = {
   handleSignup,
   handleLogin,
   handleApprove,
   getAll,
+  getSpecialists,
 }

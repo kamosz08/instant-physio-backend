@@ -9,9 +9,17 @@ export async function up(knex: Knex): Promise<void> {
     ALTER TABLE user
     ADD CONSTRAINT specialist_description_is_not_null
     CHECK (
-      type = 'specialist'
-      AND description IS NOT NULL
-    )
+        CASE
+            WHEN type = 'specialist'
+            THEN
+                CASE
+                    WHEN description IS NOT NULL
+                    THEN 1
+                    ELSE 0
+                END
+            ELSE 1
+        END = 1
+    );
   `)
 }
 

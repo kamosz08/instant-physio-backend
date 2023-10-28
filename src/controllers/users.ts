@@ -1,8 +1,9 @@
-import { validate } from 'class-validator'
+import { ValidationError, validate } from 'class-validator'
 import { RequestHandler } from 'express'
 import { usersService } from '../services/users'
-import { User } from '../types/db'
+import { Specialist, User } from '../types/db'
 import {
+  SpecialistCreateAPI,
   UserApproveAPI,
   UserCreateAPI,
   UserLoginAPI,
@@ -13,19 +14,75 @@ const getNewUserStatus = (type: User['type']): User['status'] => {
   return 'waiting_approval'
 }
 
+const validateUser = async (payload: Omit<User, 'id' | 'status'>) => {
+  const userNew = new UserCreateAPI()
+  userNew.name = payload.name
+  userNew.email = payload.email
+  userNew.password = payload.password
+  userNew.type = payload.type
+  userNew.status = getNewUserStatus(payload.type)
+
+  const errors = await validate(userNew)
+
+  return { errors, userNew }
+}
+
+const validateSpecialist = async (
+  payload: Omit<Specialist & User, 'id' | 'status'>
+) => {
+  const userNew = new SpecialistCreateAPI()
+  userNew.name = payload.name
+  userNew.email = payload.email
+  userNew.password = payload.password
+  userNew.type = 'specialist'
+  userNew.status = getNewUserStatus(payload.type)
+  userNew.description = payload.description
+  userNew.start_work = payload.start_work
+  userNew.end_work = payload.end_work
+
+  const errors = await validate(userNew)
+
+  return { errors, userNew }
+}
+
+const validateBasedOnType = async (
+  payload: Omit<Specialist & User, 'id' | 'status'>
+): Promise<{
+  errors: ValidationError[]
+  userNew: SpecialistCreateAPI | UserCreateAPI
+}> => {
+  switch (payload.type) {
+    case 'user':
+      return await validateUser(payload)
+    case 'specialist':
+      return await validateSpecialist(payload)
+    default:
+      throw new Error('Unhandled user type!')
+  }
+}
+
 const handleSignup: RequestHandler = async (req, res, next) => {
   try {
-    const { name, email, password, type, description = null } = req.body
+    const {
+      name,
+      email,
+      password,
+      type,
+      description = null,
+      start_work = null,
+      end_work = null,
+    } = req.body
 
-    const userNew = new UserCreateAPI()
-    userNew.name = name
-    userNew.email = email
-    userNew.description = description
-    userNew.password = password
-    userNew.type = type
-    userNew.status = getNewUserStatus(type)
+    const { errors, userNew } = await validateBasedOnType({
+      name,
+      email,
+      password,
+      type,
+      description,
+      start_work,
+      end_work,
+    })
 
-    const errors = await validate(userNew)
     if (errors.length) {
       res.status(400)
       res.send({ errors })

@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { db } from '../db'
-import { User } from '../types/db'
+import { Specialist, User } from '../types/db'
+import { SpecialistCreateAPI, UserCreateAPI } from '../types/models/user'
 
 const authenticate = async ({
   email,
@@ -31,13 +32,25 @@ const authenticate = async ({
   return { token }
 }
 
-const create = async ({
+const create = (payload: UserCreateAPI | SpecialistCreateAPI) => {
+  switch (payload.type) {
+    case 'user':
+      return createUser(payload as UserCreateAPI)
+
+    case 'specialist':
+      return createSpecialist(payload as SpecialistCreateAPI)
+
+    default:
+      throw new Error('Unhandled user type!')
+  }
+}
+
+const createUser = async ({
   email,
   name,
   password,
   type,
   status,
-  description,
 }: Omit<User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
     email,
@@ -45,7 +58,6 @@ const create = async ({
     password: await bcrypt.hash(password, 10),
     type,
     status,
-    description,
   }
 
   const user = await db<User>('user').insert(newUser, ['id'])
@@ -53,6 +65,49 @@ const create = async ({
   const token = jwt.sign({ id: user[0] }, process.env.JWT_SECRET as string, {
     expiresIn: 24 * 60 * 60,
   })
+
+  return { token }
+}
+
+const createSpecialist = async ({
+  email,
+  name,
+  password,
+  type,
+  status,
+  description,
+  start_work,
+  end_work,
+}: Omit<Specialist & User, 'id'>) => {
+  const newUser: Omit<User, 'id'> = {
+    email,
+    name,
+    password: await bcrypt.hash(password, 10),
+    type,
+    status,
+  }
+
+  const createdUserId = await db.transaction(async (trx) => {
+    const user = await db<User>('user').insert(newUser, 'id').transacting(trx)
+    const newUserId = user[0] as unknown as number
+    const newSpecialist: Specialist = {
+      description,
+      start_work,
+      end_work,
+      id: newUserId,
+    }
+    await db<Specialist>('specialist').insert(newSpecialist).transacting(trx)
+
+    return newUserId
+  })
+
+  const token = jwt.sign(
+    { id: createdUserId },
+    process.env.JWT_SECRET as string,
+    {
+      expiresIn: 24 * 60 * 60,
+    }
+  )
 
   return { token }
 }

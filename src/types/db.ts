@@ -7,9 +7,12 @@ export interface User {
   status: 'active' | 'waiting_approval' | 'denied' | 'inactive'
 }
 
-export type Admin = User
+export interface Admin {
+  id: number
+}
 
-export interface Specialist extends User {
+export interface Specialist {
+  id: number
   description: string
   start_work: string
   end_work: string

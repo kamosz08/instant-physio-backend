@@ -24,4 +24,17 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'waiting_approval',
     },
   ])
+
+  await knex('admin').insert([
+    {
+      id: 1,
+    },
+  ])
+
+  await knex('specialist').insert([
+    {
+      id: 2,
+      description: 'Some description',
+    },
+  ])
 }

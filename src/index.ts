@@ -10,6 +10,7 @@ import usersRouter from './routers/users'
 import specializationsRouter from './routers/specializations'
 import { logger } from './middlewares/logger'
 import { errorHandler } from './middlewares/errorHandler'
+import meetingsRouter from './routers/meetings'
 
 const PORT = 3000
 
@@ -26,6 +27,7 @@ app.use(errorHandler)
 //Routes
 app.use('/api/v1/users', usersRouter)
 app.use('/api/v1/specializations', specializationsRouter)
+app.use('/api/v1/meetings', meetingsRouter)
 
 app.listen(PORT, (): void => {
   console.log('Server Running!!')

@@ -116,8 +116,15 @@ const find = async ({ email }: { email: string }) => {
   return db<User>('user').where('email', email).first()
 }
 
-const findById = async ({ id }: { id: string }) => {
+const findById = async ({ id }: { id: number }) => {
   return db<User>('user').where('id', id).first()
+}
+
+const findByIdWithSpecialistFields = async ({ id }: { id: number }) => {
+  return db<User>('user')
+    .where('user.id', id)
+    .leftJoin<Specialist>('specialist', 'user.id', 'specialist.id')
+    .first()
 }
 
 const update = async ({ id }: { id: string }, values: Partial<User>) => {
@@ -133,6 +140,7 @@ export const usersService = {
   create,
   find,
   findById,
+  findByIdWithSpecialistFields,
   update,
   getAll,
   getSpecialists,

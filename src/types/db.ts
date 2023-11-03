@@ -30,3 +30,9 @@ export interface Meeting {
   start_time: string
   end_time: string
 }
+
+export interface MeetingParticipation {
+  user_id: number
+  meeting_id: number
+  status: 'invited' | 'accepted' | 'denied'
+}

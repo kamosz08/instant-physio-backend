@@ -8,6 +8,7 @@ import {
   UserCreateAPI,
   UserLoginAPI,
 } from '../types/models/user'
+import { ErrorWithStatus } from '../middlewares/errorHandler'
 
 const getNewUserStatus = (type: User['type']): User['status'] => {
   if (type === 'user') return 'active'
@@ -118,7 +119,7 @@ const handleLogin: RequestHandler = async (req, res, next) => {
     const user = await usersService.find({ email })
 
     if (!user) {
-      throw new Error('Unable to login')
+      throw new ErrorWithStatus('There is no user with given email', 400)
     }
 
     // Create a token for the user, if successfully authenticated

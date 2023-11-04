@@ -1,4 +1,5 @@
 import { db } from '../db'
+import { ErrorWithStatus } from '../middlewares/errorHandler'
 import { Meeting, MeetingParticipation, User } from '../types/db'
 import { isMeetingDateValid } from '../utils/isMeetingDateValid'
 import { isMeetingInRange } from '../utils/isMeetingInRange'
@@ -38,7 +39,7 @@ const verifyWorkingHours = async (
       endRange: new Date(end_work).getTime(),
     })
   ) {
-    throw new Error('Meeting does not fit into working hours')
+    throw new ErrorWithStatus('Meeting does not fit into working hours', 400)
   }
 }
 
@@ -58,7 +59,10 @@ const verifyNoAnotherMeeting = async (
         endNewMeeting: newMeetingEnd,
       })
     ) {
-      throw new Error('Meeting overlaps with already booked')
+      throw new ErrorWithStatus(
+        'Meeting overlaps with another user meeting',
+        400
+      )
     }
   })
 }
@@ -80,7 +84,7 @@ const verifyMeetingTime = async ({
       endMeeting: newMeetingEnd,
     })
   ) {
-    throw new Error('Meeting time is not valid')
+    throw new ErrorWithStatus('Meeting time is not valid', 400)
   }
 
   if (invitedUser.type === 'specialist') {
@@ -101,7 +105,7 @@ const createMeetingTwoUsers = async (
 ) => {
   const invitedUser = await usersService.findById({ id: invitedUserId })
   if (!invitedUser) {
-    throw new Error('Invited user does not exist')
+    throw new ErrorWithStatus('Invited user does not exist', 400)
   }
 
   await verifyMeetingTime({

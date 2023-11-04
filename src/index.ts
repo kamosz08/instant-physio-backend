@@ -22,12 +22,13 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(logger)
 app.use(initialize())
-app.use(errorHandler)
 
 //Routes
 app.use('/api/v1/users', usersRouter)
 app.use('/api/v1/specializations', specializationsRouter)
 app.use('/api/v1/meetings', meetingsRouter)
+
+app.use(errorHandler)
 
 app.listen(PORT, (): void => {
   console.log('Server Running!!')

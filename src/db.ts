@@ -1,6 +1,3 @@
-import { knex } from 'knex'
-import config from '../knexfile'
+import createDatabaseConnection from './createDatabaseConnection'
 
-const knexInstance = knex(config[process.env.NODE_ENV || 'development'])
-
-export const db = knexInstance
+export const db = createDatabaseConnection()

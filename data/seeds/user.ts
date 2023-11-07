@@ -24,6 +24,22 @@ export async function seed(knex: Knex): Promise<void> {
       email: 'test2@test.test',
       password: '$2y$10$6yLRDx79qvoxsR97tLzdnOXHEG1Lo5JrEBVNY7A2iu6c/WY27HROe',
       type: 'specialist',
+      status: 'waiting_approval',
+    },
+    {
+      id: 3,
+      name: 'Name Three',
+      email: 'test@example.com',
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      type: 'user',
+      status: 'active',
+    },
+    {
+      id: 4,
+      name: 'Name Four',
+      email: 'testadmin@example.com',
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      type: 'admin',
       status: 'active',
     },
   ]

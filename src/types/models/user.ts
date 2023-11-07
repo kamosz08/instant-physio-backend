@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsIn,
-  IsNumberString,
-  IsString,
-  ValidateIf,
-} from 'class-validator'
+import { IsEmail, IsIn, IsNumber, IsString, ValidateIf } from 'class-validator'
 import { Specialist, User } from '../db'
 
 export class UserCreateAPI implements Omit<User, 'id'> {
@@ -61,6 +55,6 @@ export class UserLoginAPI implements Pick<User, 'email' | 'password'> {
 }
 
 export class UserApproveAPI implements Pick<User, 'id'> {
-  @IsNumberString()
+  @IsNumber()
   id: number
 }

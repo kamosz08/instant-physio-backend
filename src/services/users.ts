@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import { db } from '../db'
 import { Specialist, User } from '../types/db'
 import { SpecialistCreateAPI, UserCreateAPI } from '../types/models/user'
+import { ErrorWithStatus } from '../middlewares/errorHandler'
 
 const authenticate = async ({
   email,
@@ -16,13 +17,13 @@ const authenticate = async ({
   const isPasswordValid = await bcrypt.compare(password, user.password)
 
   if (!isPasswordValid) {
-    throw new Error('Invalid password')
+    throw new ErrorWithStatus('Invalid password', 400)
   }
 
   const isActive = user.status === 'active'
 
   if (!isActive) {
-    throw new Error('This account is not active')
+    throw new ErrorWithStatus('This account is not active', 400)
   }
 
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
@@ -127,7 +128,7 @@ const findByIdWithSpecialistFields = async ({ id }: { id: number }) => {
     .first()
 }
 
-const update = async ({ id }: { id: string }, values: Partial<User>) => {
+const update = async ({ id }: { id: number }, values: Partial<User>) => {
   return db<User>('user').where('id', id).update(values)
 }
 

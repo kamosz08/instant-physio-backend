@@ -142,6 +142,18 @@ const handleApprove: RequestHandler = async (req, res, next) => {
       res.send({ errors })
     }
 
+    const specialistToApprove = await usersService.findById({ id })
+
+    if (!specialistToApprove) {
+      const err = new ErrorWithStatus('User not found', 404)
+      throw err
+    }
+
+    if (specialistToApprove.type !== 'specialist') {
+      const err = new ErrorWithStatus('User is not a specialist', 400)
+      throw err
+    }
+
     await usersService.update({ id }, { status: 'active' })
 
     res.sendStatus(204)

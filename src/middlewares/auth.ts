@@ -4,6 +4,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt'
 
 import { usersService } from '../services/users'
 import { User } from '../types/db'
+import { ErrorWithStatus } from './errorHandler'
 
 const { JWT_SECRET } = process.env
 
@@ -26,8 +27,7 @@ const strategy = new Strategy(
       const user = await usersService.findById({ id: jwtPayload.id })
 
       if (!user) {
-        const err = new Error('User not found')
-        // err.statusCode = 404;
+        const err = new ErrorWithStatus('User not found', 404)
         throw err
       }
 
@@ -56,7 +56,7 @@ const authenticate = () => {
 const authorize: (userType: Pick<User, 'type'>['type']) => RequestHandler =
   (userType) => (req, res, next) => {
     if (req.user.type !== userType) {
-      next(new Error('This operation is not allowed'))
+      next(new ErrorWithStatus('This operation is not allowed', 403))
     }
     next()
   }

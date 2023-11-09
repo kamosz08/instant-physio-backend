@@ -1,6 +1,7 @@
 import { Knex } from 'knex'
 import { Admin, Specialist, User } from '../../src/types/db'
 import { format } from 'date-fns'
+import { formatSpecialistWorkTime } from '../../src/utils/formatSpecialistWorkTime'
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
@@ -42,12 +43,23 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'admin',
       status: 'active',
     },
+    {
+      id: 5,
+      name: 'Name Five',
+      email: 'testspecialist@example.com',
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      type: 'specialist',
+      status: 'active',
+    },
   ]
   await knex('user').insert(users)
 
   const admins: Admin[] = [
     {
       id: 1,
+    },
+    {
+      id: 4,
     },
   ]
   await knex('admin').insert(admins)
@@ -56,8 +68,14 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 2,
       description: 'Some description',
-      start_work: format(new Date(2020, 0, 0, 8, 0), 'yyyy-MM-dd HH:mm:ss'),
-      end_work: format(new Date(2020, 0, 0, 16, 0), 'yyyy-MM-dd HH:mm:ss'),
+      start_work: formatSpecialistWorkTime(new Date(2020, 0, 0, 8, 0)),
+      end_work: formatSpecialistWorkTime(new Date(2020, 0, 0, 16, 0)),
+    },
+    {
+      id: 5,
+      description: 'Some description',
+      start_work: formatSpecialistWorkTime(new Date(2020, 0, 0, 8, 0)),
+      end_work: formatSpecialistWorkTime(new Date(2020, 0, 0, 16, 0)),
     },
   ]
 

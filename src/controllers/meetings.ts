@@ -3,6 +3,7 @@ import { RequestHandler } from 'express'
 import { meetingsService } from '../services/meetings'
 import { Meeting, User } from '../types/db'
 import { MeetingCreateAPI } from '../types/models/meeting'
+import { ErrorWithStatus } from '../middlewares/errorHandler'
 
 const save: RequestHandler = async (req, res, next) => {
   try {
@@ -18,9 +19,14 @@ const save: RequestHandler = async (req, res, next) => {
     newMeeting.end_time = end_time
 
     const errors = await validate(newMeeting)
+
     if (errors.length) {
       res.status(400)
       res.send({ errors })
+    }
+
+    if (!invitedUserId) {
+      throw new ErrorWithStatus('Missing invited user id', 400)
     }
 
     await meetingsService.createMeetingTwoUsers(

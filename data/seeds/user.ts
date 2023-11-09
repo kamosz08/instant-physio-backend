@@ -51,6 +51,14 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'specialist',
       status: 'active',
     },
+    {
+      id: 6,
+      name: 'Name Six',
+      email: 'test2@example.com',
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      type: 'user',
+      status: 'active',
+    },
   ]
   await knex('user').insert(users)
 

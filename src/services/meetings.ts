@@ -139,6 +139,6 @@ const createMeetingTwoUsers = async (
 }
 
 export const meetingsService = {
-  //   getAll,
   createMeetingTwoUsers,
+  getUserMeetings,
 }

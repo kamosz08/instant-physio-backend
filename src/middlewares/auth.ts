@@ -56,7 +56,7 @@ const authenticate = () => {
 const authorize: (userType: Pick<User, 'type'>['type']) => RequestHandler =
   (userType) => (req, res, next) => {
     if (req.user.type !== userType) {
-      next(new ErrorWithStatus('This operation is not allowed', 403))
+      next(new ErrorWithStatus('Operation not allowed', 403))
     }
     next()
   }

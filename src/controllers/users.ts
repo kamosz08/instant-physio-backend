@@ -178,10 +178,29 @@ const getSpecialists: RequestHandler = async (req, res, next) => {
   }
 }
 
+const getUserMeetings: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.userId)
+    if (!req.params.userId || Number.isNaN(userId)) {
+      throw new ErrorWithStatus('Wrong user id', 400)
+    }
+
+    const authenticatedUser = req.user as User
+    const { id: authenticatedUserId } = authenticatedUser
+
+    res.json({
+      data: await usersService.getUserMeetings({ userId, authenticatedUserId }),
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const usersController = {
   handleSignup,
   handleLogin,
   handleApprove,
   getAll,
   getSpecialists,
+  getUserMeetings,
 }

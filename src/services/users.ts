@@ -4,6 +4,7 @@ import { db } from '../db'
 import { Specialist, User } from '../types/db'
 import { SpecialistCreateAPI, UserCreateAPI } from '../types/models/user'
 import { ErrorWithStatus } from '../middlewares/errorHandler'
+import { meetingsService } from './meetings'
 
 const authenticate = async ({
   email,
@@ -136,6 +137,27 @@ const getAll = () => db<User>('user')
 
 const getSpecialists = () => db<User>('user').where('type', 'specialist')
 
+const getUserMeetings = async ({
+  userId,
+  authenticatedUserId,
+}: {
+  userId: number
+  authenticatedUserId: number
+}) => {
+  const user = await findById({ id: userId })
+
+  if (!user) {
+    const err = new ErrorWithStatus('User not found', 404)
+    throw err
+  }
+  if (user.type !== 'specialist' && userId !== authenticatedUserId) {
+    const err = new ErrorWithStatus('Operation not allowed', 403)
+    throw err
+  }
+
+  return await meetingsService.getUserMeetings(userId)
+}
+
 export const usersService = {
   authenticate,
   create,
@@ -145,4 +167,5 @@ export const usersService = {
   update,
   getAll,
   getSpecialists,
+  getUserMeetings,
 }

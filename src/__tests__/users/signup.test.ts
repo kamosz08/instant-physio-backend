@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals'
 import supertest from 'supertest'
-import createServer from '../../createServer'
+import createServer from '../../factories/createServer'
+import path from 'path'
 
 describe('user registration', () => {
   describe('given the username and password are valid', () => {
@@ -9,13 +10,13 @@ describe('user registration', () => {
 
       const { statusCode, body } = await supertest(app)
         .post('/api/v1/users/signup')
-        .send({
-          name: 'Test',
-          email: 'test1@gmail.com',
-          password: 'password',
-          description: 'Hi thewdre',
-          type: 'user',
-        })
+        .type('form')
+        .field('name', 'Test')
+        .field('email', 'test1@gmail.com')
+        .field('password', 'password')
+        .field('description', 'Hi thewdre')
+        .field('type', 'user')
+        .attach('avatar', path.resolve(__dirname, './test.jpg'))
 
       expect(statusCode).toBe(200)
 

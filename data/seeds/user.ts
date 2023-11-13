@@ -18,6 +18,7 @@ export async function seed(knex: Knex): Promise<void> {
       password: '$2a$10$2jee7O1JZlcmJnBf.zNBbuhLbJsXVG0ThARusBtKYyThTktnQ62Vm',
       type: 'admin',
       status: 'active',
+      avatar: null,
     },
     {
       id: 2,
@@ -26,6 +27,7 @@ export async function seed(knex: Knex): Promise<void> {
       password: '$2y$10$6yLRDx79qvoxsR97tLzdnOXHEG1Lo5JrEBVNY7A2iu6c/WY27HROe',
       type: 'specialist',
       status: 'waiting_approval',
+      avatar: null,
     },
     {
       id: 3,
@@ -34,6 +36,7 @@ export async function seed(knex: Knex): Promise<void> {
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'user',
       status: 'active',
+      avatar: null,
     },
     {
       id: 4,
@@ -42,6 +45,7 @@ export async function seed(knex: Knex): Promise<void> {
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'admin',
       status: 'active',
+      avatar: null,
     },
     {
       id: 5,
@@ -50,6 +54,7 @@ export async function seed(knex: Knex): Promise<void> {
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'specialist',
       status: 'active',
+      avatar: null,
     },
     {
       id: 6,
@@ -58,6 +63,7 @@ export async function seed(knex: Knex): Promise<void> {
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'user',
       status: 'active',
+      avatar: null,
     },
   ]
   await knex('user').insert(users)

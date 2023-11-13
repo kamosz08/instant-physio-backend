@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals'
 import supertest from 'supertest'
-import createServer from '../../createServer'
+import createServer from '../../factories/createServer'
 import { loginUser } from '../../testUtils/loginUser'
 import { loginAdmin } from '../../testUtils/loginAdmin'
 

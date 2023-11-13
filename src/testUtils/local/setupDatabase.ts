@@ -1,7 +1,7 @@
 import { knex } from 'knex'
 import config from '../../../knexfile'
 import { beforeAll } from '@jest/globals'
-import { getDbConfigName } from '../../createDatabaseConnection'
+import { getDbConfigName } from '../../factories/createDatabaseConnection'
 
 // Init connect knex with empty DB name so we can create DB
 beforeAll(async () => {

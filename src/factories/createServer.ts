@@ -1,12 +1,12 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import { initialize } from './middlewares/auth'
-import usersRouter from './routers/users'
-import specializationsRouter from './routers/specializations'
-import { logger } from './middlewares/logger'
-import { errorHandler } from './middlewares/errorHandler'
-import meetingsRouter from './routers/meetings'
+import { initialize } from '../middlewares/auth'
+import usersRouter from '../routers/users'
+import specializationsRouter from '../routers/specializations'
+import { logger } from '../middlewares/logger'
+import { errorHandler } from '../middlewares/errorHandler'
+import meetingsRouter from '../routers/meetings'
 
 const createServer = () => {
   const app = express()

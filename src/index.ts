@@ -1,8 +1,7 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
-console.log('HEEEEEEEEEERE index!!!!', process.env.DB_NAME)
 
-import createServer from './createServer'
+import createServer from './factories/createServer'
 
 const PORT = 3000
 

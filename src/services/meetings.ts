@@ -13,6 +13,16 @@ import { usersService } from './users'
 //   return recipes.find((recipe) => recipe.id === parseInt(id));
 // };
 
+const getUserMeetings = (userId: number) => {
+  return db<MeetingParticipation>('meeting_participation')
+    .where('user_id', userId)
+    .leftJoin<Meeting>(
+      'meeting',
+      'meeting_participation.meeting_id',
+      'meeting.id'
+    )
+}
+
 const getUserAcceptedMeetings = (userId: number) => {
   return db<MeetingParticipation>('meeting_participation')
     .where('user_id', userId)
@@ -142,4 +152,5 @@ const createMeetingTwoUsers = async (
 export const meetingsService = {
   createMeetingTwoUsers,
   getUserAcceptedMeetings,
+  getUserMeetings,
 }

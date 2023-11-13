@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals'
 import supertest from 'supertest'
-import createServer from '../../createServer'
+import createServer from '../../factories/createServer'
 
 describe('user login', () => {
   describe('given the email and password are valid', () => {

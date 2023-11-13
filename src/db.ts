@@ -1,3 +1,3 @@
-import createDatabaseConnection from './createDatabaseConnection'
+import createDatabaseConnection from './factories/createDatabaseConnection'
 
 export const db = createDatabaseConnection()

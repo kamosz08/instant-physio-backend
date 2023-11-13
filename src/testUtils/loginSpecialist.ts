@@ -1,4 +1,4 @@
-import createServer from '../createServer'
+import createServer from '../factories/createServer'
 import supertest from 'supertest'
 
 type AppType = ReturnType<typeof createServer>

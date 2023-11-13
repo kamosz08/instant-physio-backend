@@ -1,5 +1,5 @@
 import { knex } from 'knex'
-import config from '../knexfile'
+import config from '../../knexfile'
 
 export const getDbConfigName = () => {
   let configName = process.env.NODE_ENV || 'development'

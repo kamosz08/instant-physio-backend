@@ -53,6 +53,7 @@ const createUser = async ({
   password,
   type,
   status,
+  avatar,
 }: Omit<User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
     email,
@@ -60,6 +61,7 @@ const createUser = async ({
     password: await bcrypt.hash(password, 10),
     type,
     status,
+    avatar,
   }
 
   const user = await db<User>('user').insert(newUser, ['id'])
@@ -80,6 +82,7 @@ const createSpecialist = async ({
   description,
   start_work,
   end_work,
+  avatar,
 }: Omit<Specialist & User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
     email,
@@ -87,6 +90,7 @@ const createSpecialist = async ({
     password: await bcrypt.hash(password, 10),
     type,
     status,
+    avatar,
   }
 
   const createdUserId = await db.transaction(async (trx) => {

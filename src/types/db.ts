@@ -5,6 +5,7 @@ export interface User {
   password: string
   type: 'specialist' | 'user' | 'admin'
   status: 'active' | 'waiting_approval' | 'denied' | 'inactive'
+  avatar: string | null
 }
 
 export interface Admin {

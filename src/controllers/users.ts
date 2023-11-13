@@ -9,6 +9,7 @@ import {
   UserLoginAPI,
 } from '../types/models/user'
 import { ErrorWithStatus } from '../middlewares/errorHandler'
+import { getFilePath } from '../factories/createStorage'
 
 const getNewUserStatus = (type: User['type']): User['status'] => {
   if (type === 'user') return 'active'
@@ -21,6 +22,7 @@ const validateUser = async (payload: Omit<User, 'id' | 'status'>) => {
   userNew.email = payload.email
   userNew.password = payload.password
   userNew.type = payload.type
+  userNew.avatar = payload.avatar
   userNew.status = getNewUserStatus(payload.type)
 
   const errors = await validate(userNew)
@@ -40,6 +42,7 @@ const validateSpecialist = async (
   userNew.description = payload.description
   userNew.start_work = payload.start_work
   userNew.end_work = payload.end_work
+  userNew.avatar = payload.avatar
 
   const errors = await validate(userNew)
 
@@ -64,6 +67,7 @@ const validateBasedOnType = async (
 
 const handleSignup: RequestHandler = async (req, res, next) => {
   try {
+    const file = req.file
     const {
       name,
       email,
@@ -74,6 +78,11 @@ const handleSignup: RequestHandler = async (req, res, next) => {
       end_work = null,
     } = req.body
 
+    let fileUrl = null
+    if (file) {
+      fileUrl = file.destination || getFilePath(file.originalname)
+    }
+
     const { errors, userNew } = await validateBasedOnType({
       name,
       email,
@@ -82,6 +91,7 @@ const handleSignup: RequestHandler = async (req, res, next) => {
       description,
       start_work,
       end_work,
+      avatar: fileUrl,
     })
 
     if (errors.length) {

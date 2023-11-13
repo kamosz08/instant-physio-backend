@@ -16,6 +16,10 @@ export class UserCreateAPI implements Omit<User, 'id'> {
 
   @IsIn(['active', 'waiting_approval', 'denied', 'inactive'])
   status: 'active' | 'waiting_approval' | 'denied' | 'inactive'
+
+  @IsString()
+  @ValidateIf((object, value) => value !== null)
+  avatar: string | null
 }
 
 export class SpecialistCreateAPI implements Omit<Specialist & User, 'id'> {
@@ -44,6 +48,10 @@ export class SpecialistCreateAPI implements Omit<Specialist & User, 'id'> {
   @IsString()
   @ValidateIf((object, value) => value !== null)
   end_work: string | null
+
+  @IsString()
+  @ValidateIf((object, value) => value !== null)
+  avatar: string | null
 }
 
 export class UserLoginAPI implements Pick<User, 'email' | 'password'> {

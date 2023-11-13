@@ -13,9 +13,10 @@ import { usersService } from './users'
 //   return recipes.find((recipe) => recipe.id === parseInt(id));
 // };
 
-const getUserMeetings = (userId: number) => {
+const getUserAcceptedMeetings = (userId: number) => {
   return db<MeetingParticipation>('meeting_participation')
     .where('user_id', userId)
+    .where('status', 'accepted')
     .leftJoin<Meeting>(
       'meeting',
       'meeting_participation.meeting_id',
@@ -48,7 +49,7 @@ const verifyNoAnotherMeeting = async (
   newMeetingStart: number,
   newMeetingEnd: number
 ) => {
-  const userMeetings = await getUserMeetings(userId)
+  const userMeetings = await getUserAcceptedMeetings(userId)
 
   userMeetings.forEach((meeting) => {
     if (
@@ -140,5 +141,5 @@ const createMeetingTwoUsers = async (
 
 export const meetingsService = {
   createMeetingTwoUsers,
-  getUserMeetings,
+  getUserAcceptedMeetings,
 }

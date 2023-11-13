@@ -3,13 +3,13 @@ import type { Config } from 'jest'
 const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  setupFiles: ['<rootDir>/src/testUtils/local/setJestEnv.ts'],
+  setupFiles: ['<rootDir>/src/testUtils/ci/setJestEnv.ts'],
   setupFilesAfterEnv: [
-    '<rootDir>/src/testUtils/local/setupDatabase.ts',
+    '<rootDir>/src/testUtils/ci/setupDatabase.ts',
     '<rootDir>/src/testUtils/setupJest.ts',
   ],
   testMatch: ['**/__tests__/**/*.[jt]s?(x)'],
-  detectOpenHandles: true,
+  ci: true,
 }
 
 export default config

@@ -1,0 +1,38 @@
+name: Run Api E2E Tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    env:
+      TEST_ENV: ci
+      DB_PORT: 33306
+      DB_NAME: instantphysio
+      DB_USER: admin
+      DB_PASSWORD: password
+      DB_URL: localhost
+      DB_ROOT_PASSWORD: root
+      JWT_SECRET: supersecretkey
+    services:
+      mysql_server:
+        image: mysql:8.1
+        ports:
+          - 33306:3306
+        env: 
+          MYSQL_DATABASE: ${{ env.DB_NAME }}
+          MYSQL_USER: ${{ env.DB_USER }}
+          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_ROOT_PASSWORD }}
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 21
+      - run: npm ci
+      - run: npm run test:api:ci

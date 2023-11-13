@@ -9,6 +9,7 @@
     "dev": "nodemon ./src/index.ts",
     "test:unit": "jest --config=jest.config.ts",
     "test:api": "jest --config=jest-api.config.ts",
+    "test:api:ci": "jest --runInBand --config=jest-api-ci.config.ts",
     "validate-ts": "tsc --noEmit",
     "migrate": "knex migrate:latest",
     "make:migration": "knex migrate:make",

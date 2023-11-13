@@ -17,7 +17,7 @@ describe('user registration', () => {
           type: 'user',
         })
 
-      expect(statusCode).toBe(200) //TODO: change to 201?
+      expect(statusCode).toBe(200)
 
       expect(body).toEqual({
         token: expect.any(String),

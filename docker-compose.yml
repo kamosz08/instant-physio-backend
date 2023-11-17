@@ -12,7 +12,15 @@ services:
       - '/app/node_modules'
     depends_on:
       - mysql_server
+      - redis
     command: sh -c './wait-for-it.sh -t 0 mysql_server:3306 -- npm run start:dev'
+
+  redis:
+    image: redis
+    expose:
+      - "6379"
+    # ports:
+    #   - '6379:6379'
 
   mysql_server:
     image: mysql:8.1

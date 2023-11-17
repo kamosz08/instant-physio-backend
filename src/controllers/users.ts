@@ -10,6 +10,7 @@ import {
 } from '../types/models/user'
 import { ErrorWithStatus } from '../middlewares/errorHandler'
 import { getFilePath } from '../factories/createStorage'
+import { getCache } from '../cache'
 
 const getNewUserStatus = (type: User['type']): User['status'] => {
   if (type === 'user') return 'active'
@@ -174,7 +175,20 @@ const handleApprove: RequestHandler = async (req, res, next) => {
 
 const getAll: RequestHandler = async (req, res, next) => {
   try {
-    res.json({ data: await usersService.getAll() })
+    const cached = await getCache().get('users')
+    if (cached) {
+      console.log('FROM CACHE')
+      const data = JSON.parse(cached)
+      res.json({ data: data })
+      return
+    }
+
+    const data = await usersService.getAll()
+    await getCache().set('users', JSON.stringify(data), {
+      EX: 180,
+      NX: true,
+    })
+    res.json({ data: data })
   } catch (error) {
     next(error)
   }

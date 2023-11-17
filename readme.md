@@ -31,11 +31,10 @@ Main concept is to provide physiotherapy help to users. There are three types of
 - user (basic)
 - specialist
 - admin
-Both apecialist and admin are also users, they inherit from user.
 
 Existing features that this api provides:
 - User can log in/register as specialist or normal user (patient) (authentication and authorization)
-- Specialist accounts needs to be approved by admin
+- Specialist accounts need to be approved by admin
 - User can browse through specialists, read their descriptions
 - User can book a meeting with specialist
 

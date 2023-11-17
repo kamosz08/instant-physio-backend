@@ -2,9 +2,11 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 import createServer from './factories/createServer'
+import { initCacheClient } from './cache'
 
 const PORT = 3000
 
+initCacheClient()
 const app = createServer()
 
 app.listen(PORT, (): void => {

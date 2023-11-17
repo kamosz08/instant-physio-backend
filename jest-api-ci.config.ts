@@ -5,6 +5,8 @@ const config: Config = {
   testEnvironment: 'node',
   setupFiles: ['<rootDir>/src/testUtils/ci/setJestEnv.ts'],
   setupFilesAfterEnv: [
+    '<rootDir>/src/testUtils/mockRedis.ts',
+    '<rootDir>/src/testUtils/setupCache.ts',
     '<rootDir>/src/testUtils/ci/setupDatabase.ts',
     '<rootDir>/src/testUtils/setupJest.ts',
   ],

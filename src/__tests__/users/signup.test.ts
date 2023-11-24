@@ -12,7 +12,7 @@ describe('user registration', () => {
         .post('/api/v1/users/signup')
         .type('form')
         .field('name', 'Test')
-        .field('email', 'test1@gmail.com')
+        .field('username', 'test1@gmail.com')
         .field('password', 'password')
         .field('description', 'Hi thewdre')
         .field('type', 'user')
@@ -33,7 +33,7 @@ describe('user registration', () => {
       const { statusCode } = await supertest(app)
         .post('/api/v1/users/signup')
         .send({
-          email: 'test1@gmail.com',
+          username: 'test1@gmail.com',
           password: 'password',
           description: 'Hi thewdre',
           type: 'user',

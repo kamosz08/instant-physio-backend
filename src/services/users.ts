@@ -7,12 +7,12 @@ import { ErrorWithStatus } from '../middlewares/errorHandler'
 import { meetingsService } from './meetings'
 
 const authenticate = async ({
-  email,
+  username,
   password,
-}: Pick<User, 'email' | 'password'>) => {
-  const user = await find({ email })
+}: Pick<User, 'username' | 'password'>) => {
+  const user = await find({ username })
   if (!user) {
-    throw new Error('User with this email cannot be found')
+    throw new Error('User with this username cannot be found')
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password)
@@ -48,7 +48,7 @@ const create = (payload: UserCreateAPI | SpecialistCreateAPI) => {
 }
 
 const createUser = async ({
-  email,
+  username,
   name,
   password,
   type,
@@ -56,7 +56,7 @@ const createUser = async ({
   avatar,
 }: Omit<User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
-    email,
+    username,
     name,
     password: await bcrypt.hash(password, 10),
     type,
@@ -74,7 +74,7 @@ const createUser = async ({
 }
 
 const createSpecialist = async ({
-  email,
+  username,
   name,
   password,
   type,
@@ -85,7 +85,7 @@ const createSpecialist = async ({
   avatar,
 }: Omit<Specialist & User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
-    email,
+    username,
     name,
     password: await bcrypt.hash(password, 10),
     type,
@@ -118,8 +118,8 @@ const createSpecialist = async ({
   return { token }
 }
 
-const find = async ({ email }: { email: string }) => {
-  return db<User>('user').where('email', email).first()
+const find = async ({ username }: { username: string }) => {
+  return db<User>('user').where('username', username).first()
 }
 
 const findById = async ({ id }: { id: number }) => {

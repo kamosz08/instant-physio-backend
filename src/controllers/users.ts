@@ -20,7 +20,7 @@ const getNewUserStatus = (type: User['type']): User['status'] => {
 const validateUser = async (payload: Omit<User, 'id' | 'status'>) => {
   const userNew = new UserCreateAPI()
   userNew.name = payload.name
-  userNew.email = payload.email
+  userNew.username = payload.username
   userNew.password = payload.password
   userNew.type = payload.type
   userNew.avatar = payload.avatar
@@ -36,7 +36,7 @@ const validateSpecialist = async (
 ) => {
   const userNew = new SpecialistCreateAPI()
   userNew.name = payload.name
-  userNew.email = payload.email
+  userNew.username = payload.username
   userNew.password = payload.password
   userNew.type = 'specialist'
   userNew.status = getNewUserStatus(payload.type)
@@ -71,7 +71,7 @@ const handleSignup: RequestHandler = async (req, res, next) => {
     const file = req.file
     const {
       name,
-      email,
+      username,
       password,
       type,
       description = null,
@@ -86,7 +86,7 @@ const handleSignup: RequestHandler = async (req, res, next) => {
 
     const { errors, userNew } = await validateBasedOnType({
       name,
-      email,
+      username,
       password,
       type,
       description,
@@ -99,7 +99,7 @@ const handleSignup: RequestHandler = async (req, res, next) => {
       res.status(400)
       res.send({ errors })
     }
-    const user = await usersService.find({ email })
+    const user = await usersService.find({ username })
 
     if (user) {
       throw new Error('Email already exists!')
@@ -116,10 +116,10 @@ const handleSignup: RequestHandler = async (req, res, next) => {
 
 const handleLogin: RequestHandler = async (req, res, next) => {
   try {
-    const { email, password } = req.body
+    const { username, password } = req.body
 
     const userLoginInput = new UserLoginAPI()
-    userLoginInput.email = email
+    userLoginInput.username = username
     userLoginInput.password = password
 
     const errors = await validate(userLoginInput)
@@ -127,14 +127,14 @@ const handleLogin: RequestHandler = async (req, res, next) => {
       res.status(400)
       res.send({ errors })
     }
-    const user = await usersService.find({ email })
+    const user = await usersService.find({ username })
 
     if (!user) {
-      throw new ErrorWithStatus('There is no user with given email', 400)
+      throw new ErrorWithStatus('There is no user with given username', 400)
     }
 
     // Create a token for the user, if successfully authenticated
-    const { token } = await usersService.authenticate({ email, password })
+    const { token } = await usersService.authenticate({ username, password })
     res.json({ token })
   } catch (error) {
     next(error)

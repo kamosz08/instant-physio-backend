@@ -3,14 +3,14 @@ import supertest from 'supertest'
 import createServer from '../../factories/createServer'
 
 describe('user login', () => {
-  describe('given the email and password are valid', () => {
+  describe('given the username and password are valid', () => {
     it('should return a 200 status and jwt token', async () => {
       const app = createServer()
 
       const { statusCode, body } = await supertest(app)
         .post('/api/v1/users/login')
         .send({
-          email: 'test@example.com',
+          username: 'test@example.com',
           password: 'test',
         })
 
@@ -22,14 +22,14 @@ describe('user login', () => {
     })
   })
 
-  describe('given the email is invalid', () => {
+  describe('given the username is invalid', () => {
     it('should return a 400 status', async () => {
       const app = createServer()
 
       const { statusCode } = await supertest(app)
         .post('/api/v1/users/login')
         .send({
-          email: 'wrong@example.com',
+          username: 'wrong@example.com',
           password: 'test',
         })
 
@@ -44,7 +44,7 @@ describe('user login', () => {
       const { statusCode } = await supertest(app)
         .post('/api/v1/users/login')
         .send({
-          email: 'test@example.com',
+          username: 'test@example.com',
           password: 'wrong',
         })
 

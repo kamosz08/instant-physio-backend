@@ -14,7 +14,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 1,
       name: 'Name One',
-      email: 'test@test.test',
+      username: 'test@test.test',
       password: '$2a$10$2jee7O1JZlcmJnBf.zNBbuhLbJsXVG0ThARusBtKYyThTktnQ62Vm',
       type: 'admin',
       status: 'active',
@@ -23,7 +23,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 2,
       name: 'Name Two',
-      email: 'test2@test.test',
+      username: 'test2@test.test',
       password: '$2y$10$6yLRDx79qvoxsR97tLzdnOXHEG1Lo5JrEBVNY7A2iu6c/WY27HROe',
       type: 'specialist',
       status: 'waiting_approval',
@@ -32,7 +32,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 3,
       name: 'Name Three',
-      email: 'test@example.com',
+      username: 'test@example.com',
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'user',
       status: 'active',
@@ -41,7 +41,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 4,
       name: 'Name Four',
-      email: 'testadmin@example.com',
+      username: 'testadmin@example.com',
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'admin',
       status: 'active',
@@ -50,7 +50,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 5,
       name: 'Name Five',
-      email: 'testspecialist@example.com',
+      username: 'testspecialist@example.com',
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'specialist',
       status: 'active',
@@ -59,7 +59,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 6,
       name: 'Name Six',
-      email: 'test2@example.com',
+      username: 'test2@example.com',
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'user',
       status: 'active',

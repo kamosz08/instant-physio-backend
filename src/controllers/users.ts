@@ -194,6 +194,17 @@ const getAll: RequestHandler = async (req, res, next) => {
   }
 }
 
+const getMe: RequestHandler = async (req, res, next) => {
+  try {
+    const authenticatedUser = req.user as User
+    authenticatedUser.password = undefined
+
+    res.json({ data: authenticatedUser })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const getSpecialists: RequestHandler = async (req, res, next) => {
   try {
     res.json({ data: await usersService.getSpecialists() })
@@ -225,6 +236,7 @@ export const usersController = {
   handleLogin,
   handleApprove,
   getAll,
+  getMe,
   getSpecialists,
   getUserMeetings,
 }

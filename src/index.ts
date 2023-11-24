@@ -4,7 +4,7 @@ dotenv.config()
 import createServer from './factories/createServer'
 import { initCacheClient } from './cache'
 
-const PORT = 3000
+const PORT = 8000
 
 initCacheClient()
 const app = createServer()

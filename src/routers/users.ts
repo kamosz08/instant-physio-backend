@@ -22,7 +22,13 @@ usersRouter.post(
   '/approve',
   authenticate(),
   authorize('admin'),
-  usersController.handleApprove
+  usersController.approve
+)
+usersRouter.post(
+  '/:userId/specialization',
+  authenticate(),
+  authorize('admin'),
+  usersController.assignSpecialization
 )
 
 export default usersRouter

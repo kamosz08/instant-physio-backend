@@ -1,10 +1,16 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { db } from '../db'
-import { Specialist, User } from '../types/db'
+import {
+  Specialist,
+  Specialization,
+  User,
+  UserSpecialization,
+} from '../types/db'
 import { SpecialistCreateAPI, UserCreateAPI } from '../types/models/user'
 import { ErrorWithStatus } from '../middlewares/errorHandler'
 import { meetingsService } from './meetings'
+import { RichData, RichDataParams } from '../types/richData'
 
 const authenticate = async ({
   username,
@@ -139,7 +145,46 @@ const update = async ({ id }: { id: number }, values: Partial<User>) => {
 
 const getAll = () => db<User>('user')
 
-const getSpecialists = () => db<User>('user').where('type', 'specialist')
+const getSpecialists = async ({
+  page,
+  limit,
+  filters,
+  search,
+}: RichDataParams<{ specialization: number | null }>): Promise<RichData> => {
+  const data = await db<User>('user')
+    .leftJoin<Specialist>('specialist', 'user.id', 'specialist.id')
+    .select('user.id', 'name', 'username', 'avatar', 'description')
+    .where('type', 'specialist')
+    .where('status', 'active')
+    .modify((queryBuilder) => {
+      if (search) {
+        queryBuilder.where(
+          db.raw('CONCAT(name, username, description) LIKE ?', [`%${search}%`])
+        )
+      }
+      if (filters.specialization) {
+        queryBuilder
+          .leftJoin(
+            'user_specialization',
+            'user.id',
+            'user_specialization.user_id'
+          )
+          .where(
+            'user_specialization.specialization_id',
+            filters.specialization
+          )
+      }
+    })
+    .limit(limit + 1)
+    .offset((page - 1) * limit)
+
+  return {
+    data: data.length > limit ? data.slice(0, -1) : data,
+    limit,
+    page,
+    isLast: data.length < limit + 1,
+  }
+}
 
 const getUserMeetings = async ({
   userId,
@@ -162,6 +207,35 @@ const getUserMeetings = async ({
   return await meetingsService.getUserMeetings(userId)
 }
 
+const assignSpecialization = async ({
+  userId,
+  specializationId,
+}: {
+  userId: number
+  specializationId: number
+}) => {
+  const user = await findById({ id: userId })
+
+  if (!user) {
+    const err = new ErrorWithStatus('User not found', 404)
+    throw err
+  }
+
+  const specialization = await db<Specialization>('specialization')
+    .where('id', specializationId)
+    .first()
+
+  if (!specialization) {
+    const err = new ErrorWithStatus('Specialization not found', 404)
+    throw err
+  }
+
+  await db<UserSpecialization>('user_specialization').insert({
+    user_id: userId,
+    specialization_id: specializationId,
+  })
+}
+
 export const usersService = {
   authenticate,
   create,
@@ -172,4 +246,5 @@ export const usersService = {
   getAll,
   getSpecialists,
   getUserMeetings,
+  assignSpecialization,
 }

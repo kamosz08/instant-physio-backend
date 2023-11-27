@@ -3,6 +3,7 @@ import { RequestHandler } from 'express'
 import { usersService } from '../services/users'
 import { Specialist, User } from '../types/db'
 import {
+  AssignSpecializationAPI,
   SpecialistCreateAPI,
   UserApproveAPI,
   UserCreateAPI,
@@ -11,6 +12,7 @@ import {
 import { ErrorWithStatus } from '../middlewares/errorHandler'
 import { getFilePath } from '../factories/createStorage'
 import { getCache } from '../cache'
+import { specializationsService } from '../services/specializations'
 
 const getNewUserStatus = (type: User['type']): User['status'] => {
   if (type === 'user') return 'active'
@@ -141,7 +143,7 @@ const handleLogin: RequestHandler = async (req, res, next) => {
   }
 }
 
-const handleApprove: RequestHandler = async (req, res, next) => {
+const approve: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.body
     const userApproveInput = new UserApproveAPI()
@@ -176,12 +178,12 @@ const handleApprove: RequestHandler = async (req, res, next) => {
 const getAll: RequestHandler = async (req, res, next) => {
   try {
     const cached = await getCache().get('users')
-    if (cached) {
-      console.log('FROM CACHE')
-      const data = JSON.parse(cached)
-      res.json({ data: data })
-      return
-    }
+    // if (cached) {
+    //   console.log('FROM CACHE')
+    //   const data = JSON.parse(cached)
+    //   res.json({ data: data })
+    //   return
+    // }
 
     const data = await usersService.getAll()
     await getCache().set('users', JSON.stringify(data), {
@@ -207,7 +209,30 @@ const getMe: RequestHandler = async (req, res, next) => {
 
 const getSpecialists: RequestHandler = async (req, res, next) => {
   try {
-    res.json({ data: await usersService.getSpecialists() })
+    const {
+      page = 1,
+      limit = 5,
+      search = '',
+      specialization: specializationId,
+    } = req.query
+
+    let specialization
+    if (+specializationId) {
+      specialization = await specializationsService.findById({
+        id: +specializationId,
+      })
+      if (!specialization) {
+        throw new ErrorWithStatus('Specialziation does not exist', 404)
+      }
+    }
+
+    const data = await usersService.getSpecialists({
+      page: +page,
+      limit: +limit,
+      search: search.toString(),
+      filters: { specialization: specialization ? +specializationId : null },
+    })
+    res.json(data)
   } catch (error) {
     next(error)
   }
@@ -231,12 +256,39 @@ const getUserMeetings: RequestHandler = async (req, res, next) => {
   }
 }
 
+const assignSpecialization: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.userId)
+    if (!req.params.userId || Number.isNaN(userId)) {
+      throw new ErrorWithStatus('Wrong user id', 400)
+    }
+
+    const { id } = req.body
+    const assignSpecializationInput = new AssignSpecializationAPI()
+    assignSpecializationInput.specialization_id = +id
+    assignSpecializationInput.user_id = userId
+
+    const errors = await validate(assignSpecializationInput)
+    if (errors.length) {
+      res.status(400)
+      res.send({ errors })
+    }
+
+    await usersService.assignSpecialization({ userId, specializationId: +id })
+
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const usersController = {
   handleSignup,
   handleLogin,
-  handleApprove,
+  approve,
   getAll,
   getMe,
   getSpecialists,
   getUserMeetings,
+  assignSpecialization,
 }

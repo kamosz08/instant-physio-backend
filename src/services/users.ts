@@ -150,7 +150,7 @@ const getSpecialists = async ({
   limit,
   filters,
   search,
-}: RichDataParams<{ specialization: number | null }>): Promise<RichData> => {
+}: RichDataParams<{ specialization: number[] | null }>): Promise<RichData> => {
   const data = await db<User>('user')
     .leftJoin<Specialist>('specialist', 'user.id', 'specialist.id')
     .select('user.id', 'name', 'username', 'avatar', 'description')
@@ -169,7 +169,7 @@ const getSpecialists = async ({
             'user.id',
             'user_specialization.user_id'
           )
-          .where(
+          .whereIn(
             'user_specialization.specialization_id',
             filters.specialization
           )

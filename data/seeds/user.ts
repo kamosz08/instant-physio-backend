@@ -54,7 +54,7 @@ export async function seed(knex: Knex): Promise<void> {
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'specialist',
       status: 'active',
-      avatar: null,
+      avatar: 'uploads/male-1.jpg',
     },
     {
       id: 6,
@@ -64,6 +64,15 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'user',
       status: 'active',
       avatar: null,
+    },
+    {
+      id: 7,
+      name: 'Name Seven',
+      username: 'test-specialist',
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      type: 'specialist',
+      status: 'active',
+      avatar: 'uploads/male-2.jpg',
     },
   ]
   await knex('user').insert(users)

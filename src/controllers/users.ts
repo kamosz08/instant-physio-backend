@@ -213,24 +213,25 @@ const getSpecialists: RequestHandler = async (req, res, next) => {
       page = 1,
       limit = 5,
       search = '',
-      specialization: specializationId,
+      specialization: specializationIds,
     } = req.query
 
-    let specialization
-    if (+specializationId) {
-      specialization = await specializationsService.findById({
-        id: +specializationId,
-      })
-      if (!specialization) {
-        throw new ErrorWithStatus('Specialziation does not exist', 404)
-      }
+    let numberSpecializationIds: number[]
+    if (specializationIds) {
+      numberSpecializationIds = (specializationIds as string)
+        .split(',')
+        .map((s) => +s)
     }
 
     const data = await usersService.getSpecialists({
       page: +page,
       limit: +limit,
       search: search.toString(),
-      filters: { specialization: specialization ? +specializationId : null },
+      filters: {
+        specialization: numberSpecializationIds
+          ? numberSpecializationIds
+          : null,
+      },
     })
     res.json(data)
   } catch (error) {

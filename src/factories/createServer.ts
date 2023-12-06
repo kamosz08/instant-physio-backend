@@ -23,6 +23,9 @@ const createServer = () => {
   app.use('/api/v1/specializations', specializationsRouter)
   app.use('/api/v1/meetings', meetingsRouter)
 
+  //TODO: Remove temporary
+  app.use('/uploads', express.static('uploads'))
+
   app.use(errorHandler)
 
   return app

@@ -75,6 +75,7 @@ const handleSignup: RequestHandler = async (req, res, next) => {
       name,
       username,
       password,
+      gender,
       type,
       description = null,
       start_work = null,
@@ -95,6 +96,7 @@ const handleSignup: RequestHandler = async (req, res, next) => {
       start_work,
       end_work,
       avatar: fileUrl,
+      gender,
     })
 
     if (errors.length) {
@@ -214,6 +216,7 @@ const getSpecialists: RequestHandler = async (req, res, next) => {
       limit = 5,
       search = '',
       specialization: specializationIds,
+      gender,
     } = req.query
 
     let numberSpecializationIds: number[]
@@ -231,6 +234,8 @@ const getSpecialists: RequestHandler = async (req, res, next) => {
         specialization: numberSpecializationIds
           ? numberSpecializationIds
           : null,
+
+        gender: gender && typeof gender === 'string' ? gender.split(',') : null,
       },
     })
     res.json(data)

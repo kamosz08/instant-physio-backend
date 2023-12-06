@@ -20,9 +20,13 @@ export class UserCreateAPI implements Omit<User, 'id'> {
   @IsString()
   @ValidateIf((object, value) => value !== null)
   avatar: string | null
+
+  @IsIn(['male', 'female'])
+  gender: 'male' | 'female'
 }
 
 export class SpecialistCreateAPI implements Omit<Specialist & User, 'id'> {
+  gender: 'male' | 'female'
   @IsString()
   name: string
 

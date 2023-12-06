@@ -19,6 +19,7 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'admin',
       status: 'active',
       avatar: null,
+      gender: 'male',
     },
     {
       id: 2,
@@ -28,6 +29,7 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'specialist',
       status: 'waiting_approval',
       avatar: null,
+      gender: 'male',
     },
     {
       id: 3,
@@ -37,6 +39,7 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'user',
       status: 'active',
       avatar: null,
+      gender: 'male',
     },
     {
       id: 4,
@@ -46,6 +49,7 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'admin',
       status: 'active',
       avatar: null,
+      gender: 'male',
     },
     {
       id: 5,
@@ -55,6 +59,7 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/male-1.jpg',
+      gender: 'male',
     },
     {
       id: 6,
@@ -64,6 +69,7 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'user',
       status: 'active',
       avatar: null,
+      gender: 'male',
     },
     {
       id: 7,
@@ -73,6 +79,7 @@ export async function seed(knex: Knex): Promise<void> {
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/male-2.jpg',
+      gender: 'male',
     },
   ]
   await knex('user').insert(users)

@@ -60,6 +60,7 @@ const createUser = async ({
   type,
   status,
   avatar,
+  gender,
 }: Omit<User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
     username,
@@ -68,6 +69,7 @@ const createUser = async ({
     type,
     status,
     avatar,
+    gender,
   }
 
   const user = await db<User>('user').insert(newUser, ['id'])
@@ -82,6 +84,7 @@ const createUser = async ({
 const createSpecialist = async ({
   username,
   name,
+  gender,
   password,
   type,
   status,
@@ -97,6 +100,7 @@ const createSpecialist = async ({
     type,
     status,
     avatar,
+    gender,
   }
 
   const createdUserId = await db.transaction(async (trx) => {
@@ -150,10 +154,13 @@ const getSpecialists = async ({
   limit,
   filters,
   search,
-}: RichDataParams<{ specialization: number[] | null }>): Promise<RichData> => {
+}: RichDataParams<{
+  specialization: number[] | null
+  gender: string[] | null
+}>): Promise<RichData> => {
   const data = await db<User>('user')
     .leftJoin<Specialist>('specialist', 'user.id', 'specialist.id')
-    .select('user.id', 'name', 'username', 'avatar', 'description')
+    .select('user.id', 'name', 'username', 'avatar', 'gender', 'description')
     .where('type', 'specialist')
     .where('status', 'active')
     .modify((queryBuilder) => {
@@ -161,6 +168,9 @@ const getSpecialists = async ({
         queryBuilder.where(
           db.raw('CONCAT(name, username, description) LIKE ?', [`%${search}%`])
         )
+      }
+      if (filters.gender) {
+        queryBuilder.whereIn('gender', filters.gender)
       }
       if (filters.specialization) {
         queryBuilder

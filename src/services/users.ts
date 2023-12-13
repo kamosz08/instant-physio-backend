@@ -166,7 +166,9 @@ const getSpecialists = async ({
     .modify((queryBuilder) => {
       if (search) {
         queryBuilder.where(
-          db.raw('CONCAT(name, username, description) LIKE ?', [`%${search}%`])
+          db.raw("CONCAT(name, username, COALESCE(description, '')) LIKE ?", [
+            `%${search}%`,
+          ])
         )
       }
       if (filters.gender) {

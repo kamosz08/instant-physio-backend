@@ -219,22 +219,15 @@ const getSpecialists: RequestHandler = async (req, res, next) => {
       gender,
     } = req.query
 
-    let numberSpecializationIds: number[]
-    if (specializationIds) {
-      numberSpecializationIds = (specializationIds as string)
-        .split(',')
-        .map((s) => +s)
-    }
-
     const data = await usersService.getSpecialists({
       page: +page,
       limit: +limit,
       search: search.toString(),
       filters: {
-        specialization: numberSpecializationIds
-          ? numberSpecializationIds
-          : null,
-
+        specialization:
+          specializationIds && typeof specializationIds === 'string'
+            ? specializationIds.split(',').map((s) => +s)
+            : null,
         gender: gender && typeof gender === 'string' ? gender.split(',') : null,
       },
     })

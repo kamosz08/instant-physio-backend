@@ -3,7 +3,7 @@ import { specializationsController } from '../controllers/specializations'
 import { authenticate, authorize } from '../middlewares/auth'
 const specializationsRouter = express.Router()
 
-specializationsRouter.get('/', authenticate(), specializationsController.getAll)
+specializationsRouter.get('/', specializationsController.getAll)
 specializationsRouter.post(
   '/',
   authenticate(),

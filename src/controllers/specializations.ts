@@ -3,19 +3,8 @@ import { RequestHandler } from 'express'
 import { specializationsService } from '../services/specializations'
 import { Specialization } from '../types/db'
 import { SpecializationCreateAPI } from '../types/models/specialization'
-
-// const recipeExists = async (req, res, next) => {
-//   const recipe = await service.get(req.params.id);
-
-//   if (recipe === undefined) {
-//     const err = new Error("Recipe not found");
-//     err.statusCode = 404;
-//     next(err);
-//   } else {
-//     res.locals.recipe = recipe;
-//     next();
-//   }
-// };
+import { ErrorWithStatus } from '../middlewares/errorHandler'
+import { getFilePath } from '../factories/createStorage'
 
 const getAll: RequestHandler = async (req, res, next) => {
   try {
@@ -25,20 +14,48 @@ const getAll: RequestHandler = async (req, res, next) => {
   }
 }
 
-// const get = async (req, res, next) => {
-//   try {
-//     res.json({ data: res.locals.recipe });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const getSpecializationDetails: RequestHandler = async (req, res, next) => {
+  try {
+    const specializationId = Number(req.params.specializationId)
+    if (!req.params.specializationId || Number.isNaN(specializationId)) {
+      throw new ErrorWithStatus('Wrong user id', 400)
+    }
+
+    res.json({
+      data: await specializationsService.findById({ id: specializationId }),
+    })
+  } catch (error) {
+    next(error)
+  }
+}
 
 const save: RequestHandler = async (req, res, next) => {
   try {
-    const { name, description } = req.body as Omit<Specialization, 'id'>
+    const mainPhoto = req.files['mainPhoto'][0]
+    const benefitsPhoto = req.files['benefitsPhoto'][0]
+
+    const { name, description, slug, benefits } = req.body as Omit<
+      Specialization,
+      'id'
+    >
+
+    let mainPhotoUrl = null
+    if (mainPhoto) {
+      mainPhotoUrl =
+        mainPhoto.destination || getFilePath(mainPhoto.originalname)
+    }
+    let benefitsPhotoUrl = null
+    if (benefitsPhoto) {
+      benefitsPhotoUrl =
+        benefitsPhoto.destination || getFilePath(benefitsPhoto.originalname)
+    }
     const newSpecialization = new SpecializationCreateAPI()
     newSpecialization.name = name
     newSpecialization.description = description
+    newSpecialization.slug = slug
+    newSpecialization.benefits = benefits
+    newSpecialization.benefitsPhoto = benefitsPhotoUrl
+    newSpecialization.mainPhoto = mainPhotoUrl
 
     const errors = await validate(newSpecialization)
     if (errors.length) {
@@ -54,43 +71,8 @@ const save: RequestHandler = async (req, res, next) => {
   }
 }
 
-// const update = async (req, res, next) => {
-//   try {
-//     const {
-//       name,
-//       healthLabels,
-//       cookTimeMinutes,
-//       prepTimeMinutes,
-//       ingredients,
-//     } = req.body;
-
-//     const updated = await service.update(req.params.id, {
-//       name,
-//       healthLabels: [...healthLabels],
-//       cookTimeMinutes,
-//       prepTimeMinutes,
-//       ingredients: [...ingredients],
-//     });
-
-//     res.json({ data: updated });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// const remove = async (req, res, next) => {
-//   try {
-//     await service.remove(req.params.id);
-//     res.sendStatus(204);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 export const specializationsController = {
   getAll,
-  // get: [recipeExists, get],
   save,
-  // update: [recipeExists, update],
-  // remove: [recipeExists, remove],
+  getSpecializationDetails,
 }

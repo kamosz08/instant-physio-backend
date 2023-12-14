@@ -27,6 +27,7 @@ const validateUser = async (payload: Omit<User, 'id' | 'status'>) => {
   userNew.type = payload.type
   userNew.avatar = payload.avatar
   userNew.status = getNewUserStatus(payload.type)
+  userNew.gender = payload.gender
 
   const errors = await validate(userNew)
 
@@ -46,6 +47,7 @@ const validateSpecialist = async (
   userNew.start_work = payload.start_work
   userNew.end_work = payload.end_work
   userNew.avatar = payload.avatar
+  userNew.gender = payload.gender
 
   const errors = await validate(userNew)
 

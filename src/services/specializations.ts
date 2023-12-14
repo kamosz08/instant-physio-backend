@@ -1,7 +1,8 @@
 import { db } from '../db'
 import { Specialization } from '../types/db'
 
-const getAll = () => db<Specialization>('specialization')
+const getAll = () =>
+  db<Specialization>('specialization').select('id', 'slug', 'name')
 
 const save = async (specialization: Omit<Specialization, 'id'>) => {
   await db<Specialization>('specialization').insert(specialization)

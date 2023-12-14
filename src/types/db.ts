@@ -24,6 +24,10 @@ export interface Specialization {
   id: number
   name: string
   description: string
+  slug: string
+  benefits: string
+  benefitsPhoto: string
+  mainPhoto: string
 }
 
 export interface Meeting {

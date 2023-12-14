@@ -3,6 +3,7 @@ import supertest from 'supertest'
 import createServer from '../../factories/createServer'
 import { loginUser } from '../../testUtils/loginUser'
 import { loginSpecialist } from '../../testUtils/loginSpecialist'
+import path from 'path'
 
 describe('create specialization', () => {
   describe('given unauthenticated user', () => {
@@ -41,7 +42,14 @@ describe('create specialization', () => {
       const { statusCode } = await supertest(app)
         .post('/api/v1/specializations/')
         .auth(token, { type: 'bearer' })
-        .send({ name: 'Some name', description: 'Some description' })
+        .type('form')
+        .field('name', 'Test name')
+        .field('description', 'Test description')
+        .field('slug', 'test-name')
+        .field('benefits', 'Benefit 1;Benefit 2')
+        .field('type', 'user')
+        .attach('benefitsPhoto', path.resolve(__dirname, './test.jpg'))
+        .attach('mainPhoto', path.resolve(__dirname, './test.jpg'))
 
       expect(statusCode).toBe(201)
     })

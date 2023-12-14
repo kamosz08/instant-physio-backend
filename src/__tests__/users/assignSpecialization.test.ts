@@ -82,7 +82,7 @@ describe('assign specialization to user', () => {
         const token = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
-          .post('/api/v1/users/5/specialization')
+          .post('/api/v1/users/7/specialization')
           .auth(token, { type: 'bearer' })
           .send({ id: 1 })
 

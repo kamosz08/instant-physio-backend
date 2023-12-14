@@ -16,6 +16,7 @@ describe('user registration', () => {
         .field('password', 'password')
         .field('description', 'Hi thewdre')
         .field('type', 'user')
+        .field('gender', 'male')
         .attach('avatar', path.resolve(__dirname, './test.jpg'))
 
       expect(statusCode).toBe(200)

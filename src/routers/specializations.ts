@@ -7,7 +7,7 @@ const specializationsRouter = express.Router()
 
 specializationsRouter.get('/', specializationsController.getAll)
 specializationsRouter.get(
-  '/:specializationId',
+  '/:specializationSlug',
   specializationsController.getSpecializationDetails
 )
 specializationsRouter.post(

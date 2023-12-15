@@ -16,13 +16,14 @@ const getAll: RequestHandler = async (req, res, next) => {
 
 const getSpecializationDetails: RequestHandler = async (req, res, next) => {
   try {
-    const specializationId = Number(req.params.specializationId)
-    if (!req.params.specializationId || Number.isNaN(specializationId)) {
-      throw new ErrorWithStatus('Wrong user id', 400)
+    if (!req.params.specializationSlug) {
+      throw new ErrorWithStatus('Missing specialization slug', 400)
     }
 
     res.json({
-      data: await specializationsService.findById({ id: specializationId }),
+      data: await specializationsService.findBySlug({
+        slug: req.params.specializationSlug,
+      }),
     })
   } catch (error) {
     next(error)

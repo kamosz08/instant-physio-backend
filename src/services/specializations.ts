@@ -12,8 +12,13 @@ const findById = async ({ id }: { id: number }) => {
   return db<Specialization>('specialization').where('id', id).first()
 }
 
+const findBySlug = async ({ slug }: { slug: string }) => {
+  return db<Specialization>('specialization').where('slug', slug).first()
+}
+
 export const specializationsService = {
   getAll,
   save,
   findById,
+  findBySlug,
 }

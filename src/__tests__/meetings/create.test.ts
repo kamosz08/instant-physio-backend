@@ -3,7 +3,7 @@ import supertest from 'supertest'
 import createServer from '../../factories/createServer'
 import { loginUser } from '../../testUtils/loginUser'
 import { set } from 'date-fns'
-import { formatSpecialistWorkTime } from '../../utils/formatSpecialistWorkTime'
+import { formatDateToDB } from '../../utils/formatDateToDB'
 
 const getDateInFuture = ({ hours }: { hours: number }) => {
   const futureYear = new Date().getFullYear() + 1
@@ -14,7 +14,7 @@ const getDateInFuture = ({ hours }: { hours: number }) => {
     hours,
     minutes: 0,
   })
-  return formatSpecialistWorkTime(tomorrow)
+  return formatDateToDB(tomorrow)
 }
 
 describe('create meeting', () => {

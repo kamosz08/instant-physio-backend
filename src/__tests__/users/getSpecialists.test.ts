@@ -88,6 +88,66 @@ describe('get specialists', () => {
       })
       expect(body.data.length).toBeGreaterThanOrEqual(1)
     })
+    it('should return a 200 status and data', async () => {
+      const app = createServer()
+
+      const fromDate = new Date(2023, 0, 1, 9, 0)
+      const toDate = new Date(2023, 0, 1, 11, 0)
+
+      const { statusCode, body } = await supertest(app).get(
+        `/api/v1/users/specialists?search=five&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
+      )
+
+      expect(statusCode).toBe(200)
+      expect(body).toEqual({
+        data: expect.any(Array),
+        isLast: expect.any(Boolean),
+        page: expect.any(Number),
+        limit: expect.any(Number),
+      })
+
+      expect(body.data.length).toBeGreaterThanOrEqual(1)
+    })
+    it('should return a 200 status and no data', async () => {
+      const app = createServer()
+
+      const fromDate = new Date(2023, 0, 1, 16, 0)
+      const toDate = new Date(2023, 0, 1, 17, 0)
+
+      const { statusCode, body } = await supertest(app).get(
+        `/api/v1/users/specialists?search=five&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
+      )
+
+      expect(statusCode).toBe(200)
+      expect(body).toEqual({
+        data: expect.any(Array),
+        isLast: expect.any(Boolean),
+        page: expect.any(Number),
+        limit: expect.any(Number),
+      })
+
+      expect(body.data.length).toBe(0)
+    })
+    it('should return a 200 status and no data', async () => {
+      const app = createServer()
+
+      const fromDate = new Date(2023, 0, 1, 10, 0)
+      const toDate = new Date(2023, 0, 1, 11, 0)
+
+      const { statusCode, body } = await supertest(app).get(
+        `/api/v1/users/specialists?search=five&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
+      )
+
+      expect(statusCode).toBe(200)
+      expect(body).toEqual({
+        data: expect.any(Array),
+        isLast: expect.any(Boolean),
+        page: expect.any(Number),
+        limit: expect.any(Number),
+      })
+
+      expect(body.data.length).toBe(0)
+    })
     it('should return a 200 status and empty data', async () => {
       const app = createServer()
 

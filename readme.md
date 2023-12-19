@@ -27,7 +27,7 @@ To run unit tests locally:
 
 ## App description
 
-Main concept is to provide physiotherapy help to users. There are three types of users:
+Main concept is to provide personal physical training to users. There are three types of users:
 - user (basic)
 - specialist
 - admin
@@ -35,6 +35,6 @@ Main concept is to provide physiotherapy help to users. There are three types of
 Existing features that this api provides:
 - User can log in/register as specialist or normal user (patient) (authentication and authorization)
 - Specialist accounts need to be approved by admin
-- User can browse through specialists, read their descriptions
+- Anyone can browse through specialists, read their descriptions
 - User can book a meeting with specialist
 

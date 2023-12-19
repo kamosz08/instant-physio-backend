@@ -1,7 +1,6 @@
 import { Knex } from 'knex'
 import { Admin, Specialist, User } from '../../src/types/db'
-import { format } from 'date-fns'
-import { formatSpecialistWorkTime } from '../../src/utils/formatSpecialistWorkTime'
+import { formatDateToDB } from '../../src/utils/formatDateToDB'
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
@@ -98,14 +97,20 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 2,
       description: 'Some description',
-      start_work: formatSpecialistWorkTime(new Date(2020, 0, 0, 8, 0)),
-      end_work: formatSpecialistWorkTime(new Date(2020, 0, 0, 16, 0)),
+      start_work: formatDateToDB(new Date(2020, 0, 1, 8, 0)),
+      end_work: formatDateToDB(new Date(2020, 0, 1, 16, 0)),
     },
     {
       id: 5,
       description: 'Some description',
-      start_work: formatSpecialistWorkTime(new Date(2020, 0, 0, 8, 0)),
-      end_work: formatSpecialistWorkTime(new Date(2020, 0, 0, 16, 0)),
+      start_work: formatDateToDB(new Date(2020, 0, 1, 8, 0)),
+      end_work: formatDateToDB(new Date(2020, 0, 1, 16, 0)),
+    },
+    {
+      id: 7,
+      description: 'Some description 7',
+      start_work: formatDateToDB(new Date(2020, 0, 1, 8, 0)),
+      end_work: formatDateToDB(new Date(2020, 0, 1, 16, 0)),
     },
   ]
 

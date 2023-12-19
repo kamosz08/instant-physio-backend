@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { db } from '../db'
 import {
+  Meeting,
   Specialist,
   Specialization,
   User,
@@ -11,6 +12,8 @@ import { SpecialistCreateAPI, UserCreateAPI } from '../types/models/user'
 import { ErrorWithStatus } from '../middlewares/errorHandler'
 import { meetingsService } from './meetings'
 import { RichData, RichDataParams } from '../types/richData'
+import { formatDateToDB } from '../utils/formatDateToDB'
+import { getAllHoursBetween } from '../utils/getAllHoursBetween'
 
 const authenticate = async ({
   username,
@@ -157,25 +160,27 @@ const getSpecialists = async ({
 }: RichDataParams<{
   specialization: number[] | null
   gender: string[] | null
+  availableFrom: Date | null
+  availableTo: Date | null
 }>): Promise<RichData> => {
   const data = await db<User>('user')
     .leftJoin<Specialist>('specialist', 'user.id', 'specialist.id')
     .select('user.id', 'name', 'username', 'avatar', 'gender', 'description')
     .where('type', 'specialist')
-    .where('status', 'active')
-    .modify((queryBuilder) => {
+    .where('user.status', 'active')
+    .modify((filterQueryBuilder) => {
       if (search) {
-        queryBuilder.where(
+        filterQueryBuilder.where(
           db.raw("CONCAT(name, username, COALESCE(description, '')) LIKE ?", [
             `%${search}%`,
           ])
         )
       }
       if (filters.gender) {
-        queryBuilder.whereIn('gender', filters.gender)
+        filterQueryBuilder.whereIn('gender', filters.gender)
       }
       if (filters.specialization) {
-        queryBuilder
+        filterQueryBuilder
           .leftJoin(
             'user_specialization',
             'user.id',
@@ -185,6 +190,35 @@ const getSpecialists = async ({
             'user_specialization.specialization_id',
             filters.specialization
           )
+      }
+      if (filters.availableFrom && filters.availableTo) {
+        const betweenDates = getAllHoursBetween(
+          filters.availableFrom,
+          filters.availableTo
+        )
+        const datesToCheck = [filters.availableFrom, ...betweenDates]
+        filterQueryBuilder.where((meetingQueryBuilder) => {
+          datesToCheck.forEach((date) => {
+            meetingQueryBuilder.orWhere((bd) => {
+              bd.whereNotExists(
+                db('meeting')
+                  .leftJoin(
+                    'meeting_participation',
+                    'meeting.id',
+                    'meeting_participation.meeting_id'
+                  )
+                  .whereRaw('user.id = meeting_participation.user_id')
+                  .where('meeting.start_time', formatDateToDB(date))
+              )
+                .andWhereRaw('TIME(specialist.start_work) <= TIME(?)', [
+                  formatDateToDB(date),
+                ])
+                .andWhereRaw('TIME(specialist.end_work) > TIME(?)', [
+                  formatDateToDB(date),
+                ])
+            })
+          })
+        })
       }
     })
     .limit(limit + 1)

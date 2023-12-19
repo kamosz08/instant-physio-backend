@@ -219,7 +219,17 @@ const getSpecialists: RequestHandler = async (req, res, next) => {
       search = '',
       specialization: specializationIds,
       gender,
+      available,
     } = req.query
+
+    const availableFrom =
+      typeof (available as any)?.from === 'string'
+        ? new Date((available as any)?.from)
+        : null
+    const availableTo =
+      typeof (available as any)?.to === 'string'
+        ? new Date((available as any)?.to)
+        : null
 
     const data = await usersService.getSpecialists({
       page: +page,
@@ -231,6 +241,8 @@ const getSpecialists: RequestHandler = async (req, res, next) => {
             ? specializationIds.split(',').map((s) => +s)
             : null,
         gender: gender && typeof gender === 'string' ? gender.split(',') : null,
+        availableFrom: availableFrom,
+        availableTo: availableTo,
       },
     })
     res.json(data)

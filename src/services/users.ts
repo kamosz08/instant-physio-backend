@@ -139,10 +139,20 @@ const findById = async ({ id }: { id: number }) => {
   return db<User>('user').where('id', id).first()
 }
 
-const findByIdWithSpecialistFields = async ({ id }: { id: number }) => {
+const getSpecialist = async ({ id }: { id: number }) => {
   return db<User>('user')
     .where('user.id', id)
     .leftJoin<Specialist>('specialist', 'user.id', 'specialist.id')
+    .select(
+      'avatar',
+      'description',
+      'end_work',
+      'start_work',
+      'user.id',
+      'gender',
+      'name',
+      'username'
+    )
     .first()
 }
 
@@ -287,7 +297,7 @@ export const usersService = {
   create,
   find,
   findById,
-  findByIdWithSpecialistFields,
+  getSpecialist,
   update,
   getAll,
   getSpecialists,

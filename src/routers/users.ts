@@ -13,6 +13,7 @@ usersRouter.post('/login', usersController.handleLogin)
 usersRouter.get('/', authenticate(), authorize('admin'), usersController.getAll)
 usersRouter.get('/me', authenticate(), usersController.getMe)
 usersRouter.get('/specialists', usersController.getSpecialists)
+usersRouter.get('/specialists/:specialistId', usersController.getSpecialist)
 usersRouter.get(
   '/:userId/meetings',
   authenticate(),

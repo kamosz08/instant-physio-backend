@@ -39,8 +39,9 @@ const verifyWorkingHours = async (
   startMeeting: number,
   endMeeting: number
 ) => {
-  const { start_work, end_work } =
-    await usersService.findByIdWithSpecialistFields({ id: userId })
+  const { start_work, end_work } = await usersService.getSpecialist({
+    id: userId,
+  })
 
   if (
     !isMeetingInRange({

@@ -15,6 +15,10 @@ usersRouter.get('/me', authenticate(), usersController.getMe)
 usersRouter.get('/specialists', usersController.getSpecialists)
 usersRouter.get('/specialists/:specialistId', usersController.getSpecialist)
 usersRouter.get(
+  '/:specialistId/specializations',
+  usersController.getUserSpecializations
+)
+usersRouter.get(
   '/:userId/meetings',
   authenticate(),
   usersController.getUserMeetings

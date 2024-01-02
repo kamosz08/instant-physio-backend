@@ -156,6 +156,17 @@ const getSpecialist = async ({ id }: { id: number }) => {
     .first()
 }
 
+const getUserSpecializations = async ({ id }: { id: number }) => {
+  return db<UserSpecialization>('user_specialization')
+    .where('user_id', id)
+    .leftJoin<Specialization>(
+      'specialization',
+      'user_specialization.specialization_id',
+      'specialization.id'
+    )
+    .select('id', 'name', 'slug')
+}
+
 const update = async ({ id }: { id: number }, values: Partial<User>) => {
   return db<User>('user').where('id', id).update(values)
 }
@@ -298,6 +309,7 @@ export const usersService = {
   find,
   findById,
   getSpecialist,
+  getUserSpecializations,
   update,
   getAll,
   getSpecialists,

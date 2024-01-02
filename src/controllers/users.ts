@@ -266,6 +266,21 @@ const getSpecialist: RequestHandler = async (req, res, next) => {
   }
 }
 
+const getUserSpecializations: RequestHandler = async (req, res, next) => {
+  try {
+    const specialistId = Number(req.params.specialistId)
+    if (!req.params.specialistId || Number.isNaN(specialistId)) {
+      throw new ErrorWithStatus('Wrong specialist id', 400)
+    }
+
+    res.json({
+      data: await usersService.getUserSpecializations({ id: specialistId }),
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const getUserMeetings: RequestHandler = async (req, res, next) => {
   try {
     const userId = Number(req.params.userId)
@@ -320,4 +335,5 @@ export const usersController = {
   getUserMeetings,
   assignSpecialization,
   getSpecialist,
+  getUserSpecializations,
 }

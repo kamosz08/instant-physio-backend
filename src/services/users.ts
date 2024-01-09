@@ -201,16 +201,18 @@ const getSpecialists = async ({
         filterQueryBuilder.whereIn('gender', filters.gender)
       }
       if (filters.specialization) {
-        filterQueryBuilder
-          .leftJoin(
-            'user_specialization',
-            'user.id',
-            'user_specialization.user_id'
-          )
-          .whereIn(
-            'user_specialization.specialization_id',
-            filters.specialization
-          )
+        filterQueryBuilder.whereExists(
+          db('user')
+            .leftJoin(
+              'user_specialization',
+              'user.id',
+              'user_specialization.user_id'
+            )
+            .whereIn(
+              'user_specialization.specialization_id',
+              filters.specialization
+            )
+        )
       }
       if (filters.availableFrom && filters.availableTo) {
         const betweenDates = getAllHoursBetween(
@@ -244,6 +246,7 @@ const getSpecialists = async ({
     })
     .limit(limit + 1)
     .offset((page - 1) * limit)
+  console.log(data)
 
   return {
     data: data.length > limit ? data.slice(0, -1) : data,

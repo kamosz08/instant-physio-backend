@@ -215,7 +215,7 @@ const getSpecialists: RequestHandler = async (req, res, next) => {
   try {
     const {
       page = 1,
-      limit = 5,
+      limit = 6,
       search = '',
       specialization: specializationIds,
       gender,

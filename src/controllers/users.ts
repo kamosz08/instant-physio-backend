@@ -299,6 +299,21 @@ const getUserMeetings: RequestHandler = async (req, res, next) => {
   }
 }
 
+const getSpecialistAvailableHours: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.userId)
+    if (!req.params.userId || Number.isNaN(userId)) {
+      throw new ErrorWithStatus('Wrong user id', 400)
+    }
+
+    res.json({
+      data: await usersService.getSpecialistAvailableHours({ userId }),
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const assignSpecialization: RequestHandler = async (req, res, next) => {
   try {
     const userId = Number(req.params.userId)
@@ -336,4 +351,5 @@ export const usersController = {
   assignSpecialization,
   getSpecialist,
   getUserSpecializations,
+  getSpecialistAvailableHours,
 }

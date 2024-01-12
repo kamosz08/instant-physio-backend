@@ -14,6 +14,8 @@ import { meetingsService } from './meetings'
 import { RichData, RichDataParams } from '../types/richData'
 import { formatDateToDB } from '../utils/formatDateToDB'
 import { getAllHoursBetween } from '../utils/getAllHoursBetween'
+import { getExistingHoursForFutureMonths } from '../utils/getExistingHoursForFutureMonths'
+import { isEqual } from 'date-fns'
 
 const authenticate = async ({
   username,
@@ -256,6 +258,34 @@ const getSpecialists = async ({
   }
 }
 
+const getSpecialistAvailableHours = async ({ userId }: { userId: number }) => {
+  const specialist = await getSpecialist({ id: userId })
+  if (!specialist) {
+    const err = new ErrorWithStatus('User not found', 404)
+    throw err
+  }
+  const specialistMeetings = await meetingsService.getUserMeetings(userId)
+
+  const datesInNextMonths = getExistingHoursForFutureMonths(
+    new Date(),
+    2,
+    specialist.start_work,
+    specialist.end_work
+  )
+
+  const specialistMeetingStartTimes = specialistMeetings.map(
+    (meeting) => meeting.start_time
+  )
+  const result = datesInNextMonths.filter(
+    (d) =>
+      !specialistMeetingStartTimes.find((startMeeting) =>
+        isEqual(new Date(startMeeting), d)
+      )
+  )
+
+  return result
+}
+
 const getUserMeetings = async ({
   userId,
   authenticatedUserId,
@@ -316,6 +346,7 @@ export const usersService = {
   update,
   getAll,
   getSpecialists,
+  getSpecialistAvailableHours,
   getUserMeetings,
   assignSpecialization,
 }

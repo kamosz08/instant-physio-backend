@@ -19,6 +19,10 @@ usersRouter.get(
   usersController.getUserSpecializations
 )
 usersRouter.get(
+  '/:userId/availableHours',
+  usersController.getSpecialistAvailableHours
+)
+usersRouter.get(
   '/:userId/meetings',
   authenticate(),
   usersController.getUserMeetings

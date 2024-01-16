@@ -5,7 +5,7 @@ type AppType = ReturnType<typeof createServer>
 
 export const loginUser = async (app: AppType): Promise<string> => {
   const { body } = await supertest(app).post('/api/v1/users/login').send({
-    username: 'test@example.com',
+    username: 'test-user',
     password: 'test',
   })
 

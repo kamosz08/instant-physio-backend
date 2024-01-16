@@ -5,13 +5,7 @@ import { isMeetingDateValid } from '../utils/isMeetingDateValid'
 import { isMeetingInRange } from '../utils/isMeetingInRange'
 import { isMeetingOverlapping } from '../utils/isMeetingOverlapping'
 import { usersService } from './users'
-
-// const getAll = () => db<Meeting>('meeting')
-
-// const get = async (id) => {
-//   const recipes = await getAll();
-//   return recipes.find((recipe) => recipe.id === parseInt(id));
-// };
+import { formatDateToDB } from '../utils/formatDateToDB'
 
 const getUserMeetings = (userId: number) => {
   return db<MeetingParticipation>('meeting_participation')
@@ -127,9 +121,15 @@ const createMeetingTwoUsers = async (
     newMeetingEnd: new Date(meeting.end_time).getTime(),
   })
 
+  const meeingToDb = {
+    ...meeting,
+    start_time: formatDateToDB(new Date(meeting.start_time)),
+    end_time: formatDateToDB(new Date(meeting.end_time)),
+  }
+
   await db.transaction(async (trx) => {
     const newMeeting = await db<Meeting>('meeting')
-      .insert(meeting, 'id')
+      .insert(meeingToDb, 'id')
       .transacting(trx)
     const newMeetingId = newMeeting[0] as unknown as number
 

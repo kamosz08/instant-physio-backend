@@ -33,7 +33,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 3,
       name: 'Dillon Roy',
-      username: 'test@example.com',
+      username: 'test-user',
       password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
       type: 'user',
       status: 'active',

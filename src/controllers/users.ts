@@ -4,6 +4,7 @@ import { usersService } from '../services/users'
 import { Specialist, User } from '../types/db'
 import {
   AssignSpecializationAPI,
+  BuyCreditsAPI,
   SpecialistCreateAPI,
   UserApproveAPI,
   UserCreateAPI,
@@ -214,6 +215,31 @@ const getMe: RequestHandler = async (req, res, next) => {
   }
 }
 
+const buyCredits: RequestHandler = async (req, res, next) => {
+  try {
+    const authenticatedUser = req.user as User
+
+    const { credits } = req.body
+    const buyCreditsApi = new BuyCreditsAPI()
+    buyCreditsApi.credits = credits
+
+    const errors = await validate(buyCreditsApi)
+    if (errors.length) {
+      res.status(400)
+      res.send({ errors })
+    }
+
+    await usersService.addUserCredits({
+      userId: authenticatedUser.id,
+      amountToAdd: credits,
+    })
+
+    res.status(201).json()
+  } catch (error) {
+    next(error)
+  }
+}
+
 const getSpecialists: RequestHandler = async (req, res, next) => {
   try {
     const {
@@ -355,4 +381,5 @@ export const usersController = {
   getSpecialist,
   getUserSpecializations,
   getSpecialistAvailableHours,
+  buyCredits,
 }

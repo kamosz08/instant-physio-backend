@@ -82,3 +82,8 @@ export class AssignSpecializationAPI implements UserSpecialization {
   @IsNumber()
   specialization_id: number
 }
+
+export class BuyCreditsAPI {
+  @IsNumber()
+  credits: number
+}

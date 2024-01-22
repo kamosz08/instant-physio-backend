@@ -27,6 +27,7 @@ usersRouter.get(
   authenticate(),
   usersController.getUserMeetings
 )
+usersRouter.post('/buyCredits', authenticate(), usersController.buyCredits)
 usersRouter.post(
   '/approve',
   authenticate(),

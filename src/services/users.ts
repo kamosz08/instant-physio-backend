@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { db } from '../db'
 import {
-  Meeting,
   Specialist,
   Specialization,
   User,
@@ -66,6 +65,7 @@ const createUser = async ({
   status,
   avatar,
   gender,
+  credits,
 }: Omit<User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
     username,
@@ -75,6 +75,7 @@ const createUser = async ({
     status,
     avatar,
     gender,
+    credits,
   }
 
   const user = await db<User>('user').insert(newUser, ['id'])
@@ -97,6 +98,7 @@ const createSpecialist = async ({
   start_work,
   end_work,
   avatar,
+  credits,
 }: Omit<Specialist & User, 'id'>) => {
   const newUser: Omit<User, 'id'> = {
     username,
@@ -106,6 +108,7 @@ const createSpecialist = async ({
     status,
     avatar,
     gender,
+    credits,
   }
 
   const createdUserId = await db.transaction(async (trx) => {
@@ -248,7 +251,6 @@ const getSpecialists = async ({
     })
     .limit(limit + 1)
     .offset((page - 1) * limit)
-  console.log(data)
 
   return {
     data: data.length > limit ? data.slice(0, -1) : data,
@@ -336,6 +338,67 @@ const assignSpecialization = async ({
   })
 }
 
+const verifyUserCredits = async ({
+  userId,
+  requiredAmount,
+}: {
+  userId: number
+  requiredAmount: number
+}) => {
+  const user = await findById({ id: userId })
+
+  if (!user) {
+    const err = new ErrorWithStatus('User not found', 404)
+    throw err
+  }
+
+  return user.credits >= requiredAmount
+}
+
+const addUserCredits = async ({
+  userId,
+  amountToAdd,
+}: {
+  userId: number
+  amountToAdd: number
+}) => {
+  const user = await findById({ id: userId })
+
+  if (!user) {
+    const err = new ErrorWithStatus('User not found', 404)
+    throw err
+  }
+
+  return db<User>('user')
+    .where('id', userId)
+    .update({ credits: user.credits + amountToAdd })
+}
+
+const subtractUserCredits = async ({
+  userId,
+  amountToSub,
+  trx,
+}: {
+  userId: number
+  amountToSub: number
+  trx: any
+}) => {
+  const user = await findById({ id: userId })
+
+  if (!user) {
+    const err = new ErrorWithStatus('User not found', 404)
+    throw err
+  }
+
+  const newValue =
+    user.credits - amountToSub < 0 ? 0 : user.credits - amountToSub
+
+  return db<User>('user')
+    .where('id', userId)
+    .update({ credits: newValue })
+    .transacting(trx)
+}
+
 export const usersService = {
   authenticate,
   create,
@@ -349,4 +412,7 @@ export const usersService = {
   getSpecialistAvailableHours,
   getUserMeetings,
   assignSpecialization,
+  verifyUserCredits,
+  addUserCredits,
+  subtractUserCredits,
 }

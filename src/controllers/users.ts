@@ -28,6 +28,7 @@ const validateUser = async (payload: Omit<User, 'id' | 'status'>) => {
   userNew.avatar = payload.avatar
   userNew.status = getNewUserStatus(payload.type)
   userNew.gender = payload.gender
+  userNew.credits = payload.credits
 
   const errors = await validate(userNew)
 
@@ -48,6 +49,7 @@ const validateSpecialist = async (
   userNew.end_work = payload.end_work
   userNew.avatar = payload.avatar
   userNew.gender = payload.gender
+  userNew.credits = payload.credits
 
   const errors = await validate(userNew)
 
@@ -99,6 +101,7 @@ const handleSignup: RequestHandler = async (req, res, next) => {
       end_work,
       avatar: fileUrl,
       gender,
+      credits: 0,
     })
 
     if (errors.length) {

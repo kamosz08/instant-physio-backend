@@ -23,9 +23,13 @@ export class UserCreateAPI implements Omit<User, 'id'> {
 
   @IsIn(['male', 'female'])
   gender: 'male' | 'female'
+
+  @IsNumber()
+  credits: number
 }
 
 export class SpecialistCreateAPI implements Omit<Specialist & User, 'id'> {
+  credits: number
   gender: 'male' | 'female'
   @IsString()
   name: string

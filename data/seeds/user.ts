@@ -19,6 +19,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: null,
       gender: 'male',
+      credits: 0,
     },
     {
       id: 2,
@@ -29,6 +30,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'waiting_approval',
       avatar: null,
       gender: 'male',
+      credits: 0,
     },
     {
       id: 3,
@@ -39,6 +41,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: null,
       gender: 'male',
+      credits: 0,
     },
     {
       id: 4,
@@ -49,6 +52,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: null,
       gender: 'male',
+      credits: 0,
     },
     {
       id: 5,
@@ -59,6 +63,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/strength-1.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 6,
@@ -69,6 +74,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: null,
       gender: 'male',
+      credits: 0,
     },
     {
       id: 7,
@@ -79,6 +85,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/strength-2.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 8,
@@ -89,6 +96,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/all-4.png',
       gender: 'female',
+      credits: 0,
     },
     {
       id: 9,
@@ -99,6 +107,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/strength-3.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 10,
@@ -109,6 +118,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/all-5.png',
       gender: 'female',
+      credits: 0,
     },
     {
       id: 11,
@@ -119,6 +129,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/all-1.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 12,
@@ -129,6 +140,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/yoga-1.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 13,
@@ -139,6 +151,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/yoga-2.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 14,
@@ -149,6 +162,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/all-2.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 15,
@@ -159,6 +173,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/all-3.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 16,
@@ -169,6 +184,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/yoga-3.png',
       gender: 'male',
+      credits: 0,
     },
     {
       id: 17,
@@ -179,6 +195,7 @@ export async function seed(knex: Knex): Promise<void> {
       status: 'active',
       avatar: 'uploads/yoga-4.png',
       gender: 'male',
+      credits: 0,
     },
   ]
   await knex('user').insert(users)

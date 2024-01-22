@@ -7,6 +7,7 @@ export interface User {
   status: 'active' | 'waiting_approval' | 'denied' | 'inactive'
   avatar: string | null
   gender: 'male' | 'female'
+  credits: number
 }
 
 export interface Admin {

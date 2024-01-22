@@ -114,6 +114,14 @@ const createMeetingTwoUsers = async (
     throw new ErrorWithStatus('Invited user does not exist', 400)
   }
 
+  const hasCredits = await usersService.verifyUserCredits({
+    userId: creatorUser.id,
+    requiredAmount: 10,
+  })
+  if (!hasCredits) {
+    throw new ErrorWithStatus('There is not enough credits', 500)
+  }
+
   await verifyMeetingTime({
     creatorUser,
     invitedUser,
@@ -147,6 +155,12 @@ const createMeetingTwoUsers = async (
         status: 'invited',
       })
       .transacting(trx)
+
+    await usersService.subtractUserCredits({
+      userId: meeting.creator_id,
+      amountToSub: 10,
+      trx: trx,
+    })
   })
 }
 

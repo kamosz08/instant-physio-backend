@@ -5,30 +5,25 @@ import { loginUser } from '../../testUtils/loginUser'
 
 describe('buy credits', () => {
   describe('given signed in user', () => {
-    it('should return a 201 status and add credits', async () => {
+    it('should return a 200 status and add credits', async () => {
       const app = createServer()
       const token = await loginUser(app)
 
-      const { body } = await supertest(app)
+      const { body: getBody } = await supertest(app)
         .get('/api/v1/users/me')
         .auth(token, { type: 'bearer' })
 
-      expect(body?.data?.credits).toEqual(0)
+      expect(getBody?.data?.credits).toEqual(0)
 
-      const { statusCode } = await supertest(app)
+      const { statusCode, body } = await supertest(app)
         .post('/api/v1/users/buyCredits')
         .auth(token, { type: 'bearer' })
         .send({
           credits: 10,
         })
 
-      expect(statusCode).toEqual(201)
-
-      const { body: bodyAfterBuy } = await supertest(app)
-        .get('/api/v1/users/me')
-        .auth(token, { type: 'bearer' })
-
-      expect(bodyAfterBuy?.data?.credits).toEqual(10)
+      expect(statusCode).toEqual(200)
+      expect(body?.data?.credits).toEqual(10)
     })
   })
 

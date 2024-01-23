@@ -368,10 +368,11 @@ const addUserCredits = async ({
     const err = new ErrorWithStatus('User not found', 404)
     throw err
   }
-
-  return db<User>('user')
+  await db<User>('user')
     .where('id', userId)
     .update({ credits: user.credits + amountToAdd })
+
+  return db<User>('user').where('id', userId).first().select('credits')
 }
 
 const subtractUserCredits = async ({

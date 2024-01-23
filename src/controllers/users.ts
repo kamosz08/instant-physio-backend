@@ -229,12 +229,12 @@ const buyCredits: RequestHandler = async (req, res, next) => {
       res.send({ errors })
     }
 
-    await usersService.addUserCredits({
+    const data = await usersService.addUserCredits({
       userId: authenticatedUser.id,
       amountToAdd: credits,
     })
 
-    res.status(201).json()
+    res.json({ data })
   } catch (error) {
     next(error)
   }

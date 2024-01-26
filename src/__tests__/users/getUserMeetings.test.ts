@@ -22,13 +22,13 @@ describe('get user meetings', () => {
       it('should return a 403 status', async () => {
         const app = createServer()
 
-        const token = await loginUser(app)
+        const { accessToken } = await loginUser(app)
 
         const userId = 6
 
         const { statusCode } = await supertest(app)
           .get(`/api/v1/users/${userId}/meetings`)
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
 
         expect(statusCode).toBe(403)
       })
@@ -38,13 +38,13 @@ describe('get user meetings', () => {
       it('should return a 200 status and data', async () => {
         const app = createServer()
 
-        const token = await loginUser(app)
+        const { accessToken } = await loginUser(app)
 
         const userId = 3
 
         const { statusCode, body } = await supertest(app)
           .get(`/api/v1/users/${userId}/meetings`)
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
 
         expect(statusCode).toBe(200)
         expect(body).toEqual({
@@ -57,13 +57,13 @@ describe('get user meetings', () => {
       it('should return a 200 status and data', async () => {
         const app = createServer()
 
-        const token = await loginUser(app)
+        const { accessToken } = await loginUser(app)
 
         const userId = 5
 
         const { statusCode, body } = await supertest(app)
           .get(`/api/v1/users/${userId}/meetings`)
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
 
         expect(statusCode).toBe(200)
         expect(body).toEqual({

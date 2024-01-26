@@ -22,11 +22,11 @@ describe('create specialization', () => {
     it('should return a 403 status', async () => {
       const app = createServer()
 
-      const token = await loginUser(app)
+      const { accessToken } = await loginUser(app)
 
       const { statusCode } = await supertest(app)
         .post('/api/v1/specializations/')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
         .send({ name: 'Some name', description: 'Some description' })
 
       expect(statusCode).toBe(403)
@@ -37,11 +37,11 @@ describe('create specialization', () => {
     it('should return a 200 status', async () => {
       const app = createServer()
 
-      const token = await loginSpecialist(app)
+      const { accessToken } = await loginSpecialist(app)
 
       const { statusCode } = await supertest(app)
         .post('/api/v1/specializations/')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
         .type('form')
         .field('name', 'Test name')
         .field('description', 'Test description')

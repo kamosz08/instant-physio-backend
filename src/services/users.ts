@@ -16,6 +16,9 @@ import { getAllHoursBetween } from '../utils/getAllHoursBetween'
 import { getExistingHoursForFutureMonths } from '../utils/getExistingHoursForFutureMonths'
 import { isEqual } from 'date-fns'
 
+const ACCESS_EXPIRE_SECONDS = 15 * 60
+const REFRESH_EXPIRE = '30 days'
+
 const authenticate = async ({
   username,
   password,
@@ -37,11 +40,84 @@ const authenticate = async ({
     throw new ErrorWithStatus('This account is not active', 400)
   }
 
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
-    expiresIn: 24 * 60 * 60,
-  })
+  const accessToken = jwt.sign(
+    { id: user.id },
+    process.env.JWT_SECRET as string,
+    {
+      expiresIn: ACCESS_EXPIRE_SECONDS,
+    }
+  )
+  const refreshToken = jwt.sign(
+    { id: user.id },
+    process.env.JWT_REFRESH_SECRET as string,
+    { expiresIn: REFRESH_EXPIRE }
+  )
 
-  return { token }
+  const expireTime = Date.now() + (ACCESS_EXPIRE_SECONDS - 10) * 100
+
+  return { accessToken, refreshToken, expireTime }
+}
+
+const generateNewToken = async ({ refreshToken }: { refreshToken: string }) => {
+  try {
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET as string
+    )
+    if (typeof decoded === 'string') {
+      throw new ErrorWithStatus('Something went wrong', 500)
+    }
+
+    const newAccessToken = jwt.sign(
+      { id: decoded.id },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: ACCESS_EXPIRE_SECONDS,
+      }
+    )
+    const newRefreshToken = jwt.sign(
+      { id: decoded.id },
+      process.env.JWT_REFRESH_SECRET as string,
+      { expiresIn: REFRESH_EXPIRE }
+    )
+
+    const expireTime = Date.now() + (ACCESS_EXPIRE_SECONDS - 10) * 100
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      expireTime,
+    }
+  } catch (err) {
+    console.log(err)
+    throw new ErrorWithStatus('Something went wrong', 500)
+  }
+
+  // if (!refreshToken) {
+  //   res.status(403).json({ message: "Refresh token is not in database!" });
+  //   return;
+  // }
+
+  // if (RefreshToken.verifyExpiration(refreshToken)) {
+  //   RefreshToken.destroy({ where: { id: refreshToken.id } });
+
+  //   res.status(403).json({
+  //     message: "Refresh token was expired. Please make a new signin request",
+  //   });
+  //   return;
+  // }
+
+  // const accessToken = jwt.sign(
+  //   { id: user.id },
+  //   process.env.JWT_SECRET as string,
+  //   {
+  //     expiresIn: ACCESS_EXPIRE_SECONDS,
+  //   }
+  // )
+  // const refreshToken = jwt.sign(
+  //   { id: user.id },
+  //   process.env.JWT_REFRESH_SECRET as string
+  // )
 }
 
 const create = (payload: UserCreateAPI | SpecialistCreateAPI) => {
@@ -416,4 +492,5 @@ export const usersService = {
   verifyUserCredits,
   addUserCredits,
   subtractUserCredits,
+  generateNewToken,
 }

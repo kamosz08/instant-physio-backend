@@ -19,11 +19,11 @@ describe('get all users', () => {
     it('should return a 403 status', async () => {
       const app = createServer()
 
-      const token = await loginUser(app)
+      const { accessToken } = await loginUser(app)
 
       const { statusCode } = await supertest(app)
         .get('/api/v1/users/')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
 
       expect(statusCode).toBe(403)
     })
@@ -33,11 +33,11 @@ describe('get all users', () => {
     it('should return a 200 status and data', async () => {
       const app = createServer()
 
-      const token = await loginAdmin(app)
+      const {accessToken} = await loginAdmin(app)
 
       const { statusCode, body } = await supertest(app)
         .get('/api/v1/users/')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
 
       expect(statusCode).toBe(200)
       expect(body).toEqual({

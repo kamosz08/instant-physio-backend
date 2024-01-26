@@ -38,11 +38,11 @@ describe('create meeting', () => {
       it('should return a 400 status', async () => {
         const app = createServer()
 
-        const token = await loginUser(app)
+        const { accessToken } = await loginUser(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/meetings/')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             invitedUserId: 500,
             start_time: getDateInFuture({ hours: 9 }),
@@ -57,11 +57,11 @@ describe('create meeting', () => {
       it('should return a 400 status', async () => {
         const app = createServer()
 
-        const token = await loginUser(app)
+        const { accessToken } = await loginUser(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/meetings/')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             start_time: getDateInFuture({ hours: 9 }),
             end_time: getDateInFuture({ hours: 10 }),
@@ -75,11 +75,11 @@ describe('create meeting', () => {
       it('should return a 201 status', async () => {
         const app = createServer()
 
-        const token = await loginUser(app)
+        const { accessToken } = await loginUser(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/meetings/')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             invitedUserId: 5,
             start_time: getDateInFuture({ hours: 9 }),
@@ -94,11 +94,11 @@ describe('create meeting', () => {
       it('should return a 201 status then 400 status because of meeting overlap', async () => {
         const app = createServer()
 
-        const token = await loginUser(app)
+        const { accessToken } = await loginUser(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/meetings/')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             invitedUserId: 5,
             start_time: getDateInFuture({ hours: 10 }),
@@ -109,7 +109,7 @@ describe('create meeting', () => {
 
         const { statusCode: secondStatusCode } = await supertest(app)
           .post('/api/v1/meetings/')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             invitedUserId: 5,
             start_time: getDateInFuture({ hours: 10 }),

@@ -17,7 +17,9 @@ describe('user login', () => {
       expect(statusCode).toBe(200)
 
       expect(body).toEqual({
-        token: expect.any(String),
+        accessToken: expect.any(String),
+        refreshToken: expect.any(String),
+        expireTime: expect.any(Number),
       })
     })
   })

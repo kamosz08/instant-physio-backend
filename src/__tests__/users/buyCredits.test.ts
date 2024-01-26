@@ -7,17 +7,17 @@ describe('buy credits', () => {
   describe('given signed in user', () => {
     it('should return a 200 status and add credits', async () => {
       const app = createServer()
-      const token = await loginUser(app)
+      const { accessToken } = await loginUser(app)
 
       const { body: getBody } = await supertest(app)
         .get('/api/v1/users/me')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
 
       expect(getBody?.data?.credits).toEqual(0)
 
       const { statusCode, body } = await supertest(app)
         .post('/api/v1/users/buyCredits')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
         .send({
           credits: 10,
         })

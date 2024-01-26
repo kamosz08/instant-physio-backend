@@ -10,6 +10,7 @@ usersRouter.post(
   usersController.handleSignup
 )
 usersRouter.post('/login', usersController.handleLogin)
+usersRouter.post('/token', usersController.handleRefreshToken)
 usersRouter.get('/', authenticate(), authorize('admin'), usersController.getAll)
 usersRouter.get('/me', authenticate(), usersController.getMe)
 usersRouter.get('/specialists', usersController.getSpecialists)

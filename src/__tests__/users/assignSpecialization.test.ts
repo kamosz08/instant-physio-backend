@@ -21,11 +21,11 @@ describe('assign specialization to user', () => {
     it('should return a 403 status', async () => {
       const app = createServer()
 
-      const token = await loginUser(app)
+      const { accessToken } = await loginUser(app)
 
       const { statusCode } = await supertest(app)
         .post('/api/v1/users/5/specialization')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
         .send({ id: 1 })
 
       expect(statusCode).toBe(403)
@@ -37,11 +37,11 @@ describe('assign specialization to user', () => {
       it('should return a 400 status', async () => {
         const app = createServer()
 
-        const token = await loginAdmin(app)
+        const {accessToken} = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/5/specialization')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({ somethingwrong: 1 })
 
         expect(statusCode).toBe(400)
@@ -51,11 +51,11 @@ describe('assign specialization to user', () => {
       it('should return a 404 status', async () => {
         const app = createServer()
 
-        const token = await loginAdmin(app)
+        const {accessToken} = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/5/specialization')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({ id: 101 })
 
         expect(statusCode).toBe(404)
@@ -65,11 +65,11 @@ describe('assign specialization to user', () => {
       it('should return a 404 status', async () => {
         const app = createServer()
 
-        const token = await loginAdmin(app)
+        const {accessToken} = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/505/specialization')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({ id: 1 })
 
         expect(statusCode).toBe(404)
@@ -79,11 +79,11 @@ describe('assign specialization to user', () => {
       it('should return a 204 status', async () => {
         const app = createServer()
 
-        const token = await loginAdmin(app)
+        const {accessToken} = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/7/specialization')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({ id: 1 })
 
         expect(statusCode).toBe(204)

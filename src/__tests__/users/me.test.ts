@@ -7,11 +7,11 @@ describe('get me', () => {
   describe('given signed in user', () => {
     it('should return a 200 status and body', async () => {
       const app = createServer()
-      const token = await loginUser(app)
+      const { accessToken } = await loginUser(app)
 
       const { statusCode, body } = await supertest(app)
         .get('/api/v1/users/me')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
 
       expect(statusCode).toBe(200)
 

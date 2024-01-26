@@ -5,6 +5,7 @@ import { Specialist, User } from '../types/db'
 import {
   AssignSpecializationAPI,
   BuyCreditsAPI,
+  RefreshTokenAPI,
   SpecialistCreateAPI,
   UserApproveAPI,
   UserCreateAPI,
@@ -144,8 +145,39 @@ const handleLogin: RequestHandler = async (req, res, next) => {
     }
 
     // Create a token for the user, if successfully authenticated
-    const { token } = await usersService.authenticate({ username, password })
-    res.json({ token })
+    const data = await usersService.authenticate({ username, password })
+
+    res.cookie('refreshToken', data.refreshToken, {
+      httpOnly: true,
+      secure: true,
+    })
+    data.refreshToken = undefined
+    res.json(data)
+  } catch (error) {
+    next(error)
+  }
+}
+
+const handleRefreshToken: RequestHandler = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body
+
+    const refreshTokenInput = new RefreshTokenAPI()
+    refreshTokenInput.refreshToken = refreshToken
+
+    const errors = await validate(refreshTokenInput)
+    if (errors.length) {
+      res.status(400)
+      res.send({ errors })
+    }
+
+    const data = await usersService.generateNewToken({ refreshToken })
+    res.cookie('refreshToken', data.refreshToken, {
+      httpOnly: true,
+      secure: true,
+    })
+    data.refreshToken = undefined
+    res.json(data)
   } catch (error) {
     next(error)
   }
@@ -372,6 +404,7 @@ const assignSpecialization: RequestHandler = async (req, res, next) => {
 export const usersController = {
   handleSignup,
   handleLogin,
+  handleRefreshToken,
   approve,
   getAll,
   getMe,

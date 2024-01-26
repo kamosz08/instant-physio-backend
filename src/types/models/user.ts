@@ -87,3 +87,8 @@ export class BuyCreditsAPI {
   @IsNumber()
   credits: number
 }
+
+export class RefreshTokenAPI {
+  @IsString()
+  refreshToken: number
+}

@@ -29,11 +29,11 @@ describe('approve specialist', () => {
     it('should return a 403 status', async () => {
       const app = createServer()
 
-      const token = await loginUser(app)
+      const { accessToken } = await loginUser(app)
 
       const { statusCode } = await supertest(app)
         .post('/api/v1/users/approve')
-        .auth(token, { type: 'bearer' })
+        .auth(accessToken, { type: 'bearer' })
         .send({
           id: 2,
         })
@@ -47,11 +47,11 @@ describe('approve specialist', () => {
       it('should return a 404 status', async () => {
         const app = createServer()
 
-        const token = await loginAdmin(app)
+        const { accessToken } = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/approve')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             id: 400,
           })
@@ -64,11 +64,11 @@ describe('approve specialist', () => {
       it('should return a 400 status', async () => {
         const app = createServer()
 
-        const token = await loginAdmin(app)
+        const { accessToken } = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/approve')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             id: 1,
           })
@@ -81,11 +81,11 @@ describe('approve specialist', () => {
       it('should return a 400 status', async () => {
         const app = createServer()
 
-        const token = await loginAdmin(app)
+        const { accessToken } = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/approve')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             wrong: 2,
           })
@@ -98,18 +98,18 @@ describe('approve specialist', () => {
       it('should return a 204 status and update specialist status field', async () => {
         const app = createServer()
 
-        const token = await loginAdmin(app)
+        const { accessToken } = await loginAdmin(app)
 
         const { body: beforeUsers } = await supertest(app)
           .get('/api/v1/users/')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
 
         const specialistStatus = getSpecialistStatus(beforeUsers.data, 2)
         expect(specialistStatus).toEqual('waiting_approval')
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/approve')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
           .send({
             id: 2,
           })
@@ -118,7 +118,7 @@ describe('approve specialist', () => {
 
         const { body: afterUsers } = await supertest(app)
           .get('/api/v1/users/')
-          .auth(token, { type: 'bearer' })
+          .auth(accessToken, { type: 'bearer' })
 
         const finalSpecialistStatus = getSpecialistStatus(afterUsers.data, 2)
         expect(finalSpecialistStatus).toEqual('active')

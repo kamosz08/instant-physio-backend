@@ -13,8 +13,7 @@ import {
 } from '../types/models/user'
 import { ErrorWithStatus } from '../middlewares/errorHandler'
 import { getFilePath } from '../factories/createStorage'
-import { getCache } from '../cache'
-import { specializationsService } from '../services/specializations'
+import { getRedis } from '../cache'
 
 const getNewUserStatus = (type: User['type']): User['status'] => {
   if (type === 'user') return 'active'
@@ -217,7 +216,7 @@ const approve: RequestHandler = async (req, res, next) => {
 
 const getAll: RequestHandler = async (req, res, next) => {
   try {
-    const cached = await getCache().get('users')
+    const cached = await getRedis().get('users')
     // if (cached) {
     //   console.log('FROM CACHE')
     //   const data = JSON.parse(cached)
@@ -226,7 +225,7 @@ const getAll: RequestHandler = async (req, res, next) => {
     // }
 
     const data = await usersService.getAll()
-    await getCache().set('users', JSON.stringify(data), {
+    await getRedis().set('users', JSON.stringify(data), {
       EX: 180,
       NX: true,
     })

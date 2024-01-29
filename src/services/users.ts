@@ -15,9 +15,11 @@ import { formatDateToDB } from '../utils/formatDateToDB'
 import { getAllHoursBetween } from '../utils/getAllHoursBetween'
 import { getExistingHoursForFutureMonths } from '../utils/getExistingHoursForFutureMonths'
 import { isEqual } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid'
+import { getRedis } from '../cache'
 
 const ACCESS_EXPIRE_SECONDS = 15 * 60
-const REFRESH_EXPIRE = '30 days'
+const REFRESH_EXPIRE = 30 * 24 * 60 * 60
 
 const authenticate = async ({
   username,
@@ -48,10 +50,14 @@ const authenticate = async ({
     }
   )
   const refreshToken = jwt.sign(
-    { id: user.id },
+    { id: user.id, uuid: uuidv4() },
     process.env.JWT_REFRESH_SECRET as string,
     { expiresIn: REFRESH_EXPIRE }
   )
+
+  await getRedis().set(`refreshToken-${refreshToken}`, refreshToken, {
+    EX: REFRESH_EXPIRE,
+  })
 
   const expireTime = Date.now() + (ACCESS_EXPIRE_SECONDS - 10) * 100
 
@@ -60,12 +66,17 @@ const authenticate = async ({
 
 const generateNewToken = async ({ refreshToken }: { refreshToken: string }) => {
   try {
+    const hasKey = await getRedis().exists(`refreshToken-${refreshToken}`)
+    if (hasKey === 0) {
+      throw new ErrorWithStatus('Given refresh token is not valid', 404)
+    }
+
     const decoded = jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET as string
     )
     if (typeof decoded === 'string') {
-      throw new ErrorWithStatus('Something went wrong', 500)
+      throw new ErrorWithStatus('Given refresh token is not valid', 404)
     }
 
     const newAccessToken = jwt.sign(
@@ -76,10 +87,13 @@ const generateNewToken = async ({ refreshToken }: { refreshToken: string }) => {
       }
     )
     const newRefreshToken = jwt.sign(
-      { id: decoded.id },
+      { id: decoded.id, uuid: uuidv4() },
       process.env.JWT_REFRESH_SECRET as string,
       { expiresIn: REFRESH_EXPIRE }
     )
+    await getRedis().set(`refreshToken-${refreshToken}`, newRefreshToken, {
+      EX: REFRESH_EXPIRE,
+    })
 
     const expireTime = Date.now() + (ACCESS_EXPIRE_SECONDS - 10) * 100
 
@@ -92,32 +106,6 @@ const generateNewToken = async ({ refreshToken }: { refreshToken: string }) => {
     console.log(err)
     throw new ErrorWithStatus('Something went wrong', 500)
   }
-
-  // if (!refreshToken) {
-  //   res.status(403).json({ message: "Refresh token is not in database!" });
-  //   return;
-  // }
-
-  // if (RefreshToken.verifyExpiration(refreshToken)) {
-  //   RefreshToken.destroy({ where: { id: refreshToken.id } });
-
-  //   res.status(403).json({
-  //     message: "Refresh token was expired. Please make a new signin request",
-  //   });
-  //   return;
-  // }
-
-  // const accessToken = jwt.sign(
-  //   { id: user.id },
-  //   process.env.JWT_SECRET as string,
-  //   {
-  //     expiresIn: ACCESS_EXPIRE_SECONDS,
-  //   }
-  // )
-  // const refreshToken = jwt.sign(
-  //   { id: user.id },
-  //   process.env.JWT_REFRESH_SECRET as string
-  // )
 }
 
 const create = (payload: UserCreateAPI | SpecialistCreateAPI) => {

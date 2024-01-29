@@ -8,7 +8,6 @@ describe('refresh token', () => {
     const app = createServer()
 
     const { refreshToken } = await loginUser(app)
-    console.log('old', refreshToken)
 
     const response = await supertest(app).post('/api/v1/users/token').send({
       refreshToken: refreshToken,
@@ -19,7 +18,6 @@ describe('refresh token', () => {
       .split(';')
       .find((s) => s.includes('refreshToken'))
       .split('=')[1]
-    console.log('new', newRefreshToken)
 
     expect(statusCode).toBe(200)
     expect(typeof newRefreshToken).toBe('string')

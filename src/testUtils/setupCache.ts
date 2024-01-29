@@ -1,6 +1,6 @@
-import { initCacheClient } from '../cache'
+import { initRedisClient } from '../cache'
 
 // eslint-disable-next-line prettier/prettier
 (async function () {
-  await initCacheClient(true)
+  await initRedisClient(true)
 })()

@@ -1,6 +1,6 @@
-import { cacheCreator } from './factories/createCache'
+import { redisClientCreator } from './factories/createRedis'
 
-const cacheCtr = cacheCreator()
+const redisClientCtr = redisClientCreator()
 
-export const initCacheClient = cacheCtr.initialize
-export const getCache = cacheCtr.getClient
+export const initRedisClient = redisClientCtr.initialize
+export const getRedis = redisClientCtr.getClient

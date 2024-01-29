@@ -2,11 +2,11 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 import createServer from './factories/createServer'
-import { initCacheClient } from './cache'
+import { initRedisClient } from './cache'
 
 const PORT = 8000
 
-initCacheClient()
+initRedisClient()
 const app = createServer()
 
 app.listen(PORT, (): void => {

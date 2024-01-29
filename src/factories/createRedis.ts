@@ -1,6 +1,6 @@
 import { createClient } from 'redis'
 
-export function cacheCreator() {
+export function redisClientCreator() {
   let client
   let initialized = false
   const initialize = async (mock = false) => {

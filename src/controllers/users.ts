@@ -341,7 +341,7 @@ const getUserSpecializations: RequestHandler = async (req, res, next) => {
   }
 }
 
-const getUserMeetings: RequestHandler = async (req, res, next) => {
+const getUserUpcomingMeetings: RequestHandler = async (req, res, next) => {
   try {
     const userId = Number(req.params.userId)
     if (!req.params.userId || Number.isNaN(userId)) {
@@ -352,7 +352,31 @@ const getUserMeetings: RequestHandler = async (req, res, next) => {
     const { id: authenticatedUserId } = authenticatedUser
 
     res.json({
-      data: await usersService.getUserMeetings({ userId, authenticatedUserId }),
+      data: await usersService.getUserUpcomingMeetings({
+        userId,
+        authenticatedUserId,
+      }),
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getUserHistoryMeetings: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.userId)
+    if (!req.params.userId || Number.isNaN(userId)) {
+      throw new ErrorWithStatus('Wrong user id', 400)
+    }
+
+    const authenticatedUser = req.user as User
+    const { id: authenticatedUserId } = authenticatedUser
+
+    res.json({
+      data: await usersService.getUserHistoryMeetings({
+        userId,
+        authenticatedUserId,
+      }),
     })
   } catch (error) {
     next(error)
@@ -361,8 +385,8 @@ const getUserMeetings: RequestHandler = async (req, res, next) => {
 
 const getSpecialistAvailableHours: RequestHandler = async (req, res, next) => {
   try {
-    const userId = Number(req.params.userId)
-    if (!req.params.userId || Number.isNaN(userId)) {
+    const userId = Number(req.params.specialistId)
+    if (!req.params.specialistId || Number.isNaN(userId)) {
       throw new ErrorWithStatus('Wrong user id', 400)
     }
 
@@ -408,7 +432,8 @@ export const usersController = {
   getAll,
   getMe,
   getSpecialists,
-  getUserMeetings,
+  getUserUpcomingMeetings,
+  getUserHistoryMeetings,
   assignSpecialization,
   getSpecialist,
   getUserSpecializations,

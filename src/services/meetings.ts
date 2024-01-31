@@ -7,7 +7,7 @@ import { isMeetingOverlapping } from '../utils/isMeetingOverlapping'
 import { usersService } from './users'
 import { formatDateToDB } from '../utils/formatDateToDB'
 
-const getUserMeetings = (userId: number) => {
+const getSpecialistMeetings = async (userId: number) => {
   return db<MeetingParticipation>('meeting_participation')
     .where('user_id', userId)
     .leftJoin<Meeting>(
@@ -15,6 +15,52 @@ const getUserMeetings = (userId: number) => {
       'meeting_participation.meeting_id',
       'meeting.id'
     )
+}
+
+const getUserUpcomingMeetings = async (userId: number) => {
+  const meetings = await db<MeetingParticipation>('meeting_participation')
+    .where('user_id', userId)
+    .leftJoin<Meeting>(
+      'meeting',
+      'meeting_participation.meeting_id',
+      'meeting.id'
+    )
+    .whereRaw('TIME(end_time) >= TIME(?)', [formatDateToDB(new Date())])
+    .select('id', 'status', 'start_time', 'creator_id')
+    .orderBy('start_time', 'desc')
+
+  return await Promise.all(
+    meetings.map(async (meeting) => ({
+      ...meeting,
+      participants: await db<MeetingParticipation>('meeting_participation')
+        .where('meeting_id', meeting.id)
+        .leftJoin<User>('user', 'meeting_participation.user_id', 'user.id')
+        .select('avatar', 'id', 'name'),
+    }))
+  )
+}
+
+const getUserHistoryMeetings = async (userId: number) => {
+  const meetings = await db<MeetingParticipation>('meeting_participation')
+    .where('user_id', userId)
+    .leftJoin<Meeting>(
+      'meeting',
+      'meeting_participation.meeting_id',
+      'meeting.id'
+    )
+    .whereRaw('TIME(end_time) < TIME(?)', [formatDateToDB(new Date())])
+    .select('id', 'status', 'start_time', 'creator_id')
+    .orderBy('start_time', 'desc')
+
+  return await Promise.all(
+    meetings.map(async (meeting) => ({
+      ...meeting,
+      participants: await db<MeetingParticipation>('meeting_participation')
+        .where('meeting_id', meeting.id)
+        .leftJoin<User>('user', 'meeting_participation.user_id', 'user.id')
+        .select('avatar', 'id', 'name'),
+    }))
+  )
 }
 
 const getUserAcceptedMeetings = (userId: number) => {
@@ -167,5 +213,7 @@ const createMeetingTwoUsers = async (
 export const meetingsService = {
   createMeetingTwoUsers,
   getUserAcceptedMeetings,
-  getUserMeetings,
+  getSpecialistMeetings,
+  getUserUpcomingMeetings,
+  getUserHistoryMeetings,
 }

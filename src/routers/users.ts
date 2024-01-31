@@ -20,13 +20,18 @@ usersRouter.get(
   usersController.getUserSpecializations
 )
 usersRouter.get(
-  '/:userId/availableHours',
+  '/:specialistId/availableHours',
   usersController.getSpecialistAvailableHours
 )
 usersRouter.get(
-  '/:userId/meetings',
+  '/:userId/meetings/upcoming',
   authenticate(),
-  usersController.getUserMeetings
+  usersController.getUserUpcomingMeetings
+)
+usersRouter.get(
+  '/:userId/meetings/history',
+  authenticate(),
+  usersController.getUserHistoryMeetings
 )
 usersRouter.post('/buyCredits', authenticate(), usersController.buyCredits)
 usersRouter.post(

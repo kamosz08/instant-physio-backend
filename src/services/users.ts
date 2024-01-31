@@ -91,7 +91,7 @@ const generateNewToken = async ({ refreshToken }: { refreshToken: string }) => {
       process.env.JWT_REFRESH_SECRET as string,
       { expiresIn: REFRESH_EXPIRE }
     )
-    await getRedis().set(`refreshToken-${refreshToken}`, newRefreshToken, {
+    await getRedis().set(`refreshToken-${newRefreshToken}`, newRefreshToken, {
       EX: REFRESH_EXPIRE,
     })
 
@@ -330,7 +330,7 @@ const getSpecialistAvailableHours = async ({ userId }: { userId: number }) => {
     const err = new ErrorWithStatus('User not found', 404)
     throw err
   }
-  const specialistMeetings = await meetingsService.getUserMeetings(userId)
+  const specialistMeetings = await meetingsService.getSpecialistMeetings(userId)
 
   const datesInNextMonths = getExistingHoursForFutureMonths(
     new Date(),
@@ -352,7 +352,7 @@ const getSpecialistAvailableHours = async ({ userId }: { userId: number }) => {
   return result
 }
 
-const getUserMeetings = async ({
+const getSpecialistMeetings = async ({
   userId,
   authenticatedUserId,
 }: {
@@ -370,7 +370,49 @@ const getUserMeetings = async ({
     throw err
   }
 
-  return await meetingsService.getUserMeetings(userId)
+  return await meetingsService.getSpecialistMeetings(userId)
+}
+
+const getUserUpcomingMeetings = async ({
+  userId,
+  authenticatedUserId,
+}: {
+  userId: number
+  authenticatedUserId: number
+}) => {
+  const user = await findById({ id: userId })
+
+  if (!user) {
+    const err = new ErrorWithStatus('User not found', 404)
+    throw err
+  }
+  if (user.type !== 'specialist' && userId !== authenticatedUserId) {
+    const err = new ErrorWithStatus('Operation not allowed', 403)
+    throw err
+  }
+
+  return await meetingsService.getUserUpcomingMeetings(userId)
+}
+
+const getUserHistoryMeetings = async ({
+  userId,
+  authenticatedUserId,
+}: {
+  userId: number
+  authenticatedUserId: number
+}) => {
+  const user = await findById({ id: userId })
+
+  if (!user) {
+    const err = new ErrorWithStatus('User not found', 404)
+    throw err
+  }
+  if (user.type !== 'specialist' && userId !== authenticatedUserId) {
+    const err = new ErrorWithStatus('Operation not allowed', 403)
+    throw err
+  }
+
+  return await meetingsService.getUserHistoryMeetings(userId)
 }
 
 const assignSpecialization = async ({
@@ -475,7 +517,9 @@ export const usersService = {
   getAll,
   getSpecialists,
   getSpecialistAvailableHours,
-  getUserMeetings,
+  getSpecialistMeetings,
+  getUserUpcomingMeetings,
+  getUserHistoryMeetings,
   assignSpecialization,
   verifyUserCredits,
   addUserCredits,

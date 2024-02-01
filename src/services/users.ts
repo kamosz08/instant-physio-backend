@@ -330,7 +330,9 @@ const getSpecialistAvailableHours = async ({ userId }: { userId: number }) => {
     const err = new ErrorWithStatus('User not found', 404)
     throw err
   }
-  const specialistMeetings = await meetingsService.getSpecialistMeetings(userId)
+  const specialistMeetings = await meetingsService.getUserAcceptedMeetings(
+    userId
+  )
 
   const datesInNextMonths = getExistingHoursForFutureMonths(
     new Date(),
@@ -350,27 +352,6 @@ const getSpecialistAvailableHours = async ({ userId }: { userId: number }) => {
   )
 
   return result
-}
-
-const getSpecialistMeetings = async ({
-  userId,
-  authenticatedUserId,
-}: {
-  userId: number
-  authenticatedUserId: number
-}) => {
-  const user = await findById({ id: userId })
-
-  if (!user) {
-    const err = new ErrorWithStatus('User not found', 404)
-    throw err
-  }
-  if (user.type !== 'specialist' && userId !== authenticatedUserId) {
-    const err = new ErrorWithStatus('Operation not allowed', 403)
-    throw err
-  }
-
-  return await meetingsService.getSpecialistMeetings(userId)
 }
 
 const getUserUpcomingMeetings = async ({
@@ -517,7 +498,6 @@ export const usersService = {
   getAll,
   getSpecialists,
   getSpecialistAvailableHours,
-  getSpecialistMeetings,
   getUserUpcomingMeetings,
   getUserHistoryMeetings,
   assignSpecialization,

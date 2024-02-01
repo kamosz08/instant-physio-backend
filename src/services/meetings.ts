@@ -7,16 +7,6 @@ import { isMeetingOverlapping } from '../utils/isMeetingOverlapping'
 import { usersService } from './users'
 import { formatDateToDB } from '../utils/formatDateToDB'
 
-const getSpecialistMeetings = async (userId: number) => {
-  return db<MeetingParticipation>('meeting_participation')
-    .where('user_id', userId)
-    .leftJoin<Meeting>(
-      'meeting',
-      'meeting_participation.meeting_id',
-      'meeting.id'
-    )
-}
-
 const getUserUpcomingMeetings = async (userId: number) => {
   const meetings = await db<MeetingParticipation>('meeting_participation')
     .where('user_id', userId)
@@ -25,9 +15,9 @@ const getUserUpcomingMeetings = async (userId: number) => {
       'meeting_participation.meeting_id',
       'meeting.id'
     )
-    .whereRaw('TIME(end_time) >= TIME(?)', [formatDateToDB(new Date())])
+    .whereRaw('end_time >= ?', [formatDateToDB(new Date())])
     .select('id', 'status', 'start_time', 'creator_id')
-    .orderBy('start_time', 'desc')
+    .orderBy('start_time', 'asc')
 
   return await Promise.all(
     meetings.map(async (meeting) => ({
@@ -48,7 +38,7 @@ const getUserHistoryMeetings = async (userId: number) => {
       'meeting_participation.meeting_id',
       'meeting.id'
     )
-    .whereRaw('TIME(end_time) < TIME(?)', [formatDateToDB(new Date())])
+    .whereRaw('end_time < ?', [formatDateToDB(new Date())])
     .select('id', 'status', 'start_time', 'creator_id')
     .orderBy('start_time', 'desc')
 
@@ -72,6 +62,33 @@ const getUserAcceptedMeetings = (userId: number) => {
       'meeting_participation.meeting_id',
       'meeting.id'
     )
+}
+
+const updateMeetingStatus = (
+  meetingId: number,
+  status: MeetingParticipation['status']
+) => {
+  return db<MeetingParticipation>('meeting_participation')
+    .where('meeting_id', meetingId)
+    .update('status', status)
+}
+
+const isUserPartOfMeeting = async ({
+  meetingId,
+  userId,
+}: {
+  meetingId: number
+  userId: number
+}) => {
+  const meetingParticipation = await db<MeetingParticipation>(
+    'meeting_participation'
+  )
+    .where('meeting_id', meetingId)
+    .where('user_id', userId)
+    .first()
+
+  if (meetingParticipation) return true
+  return false
 }
 
 const verifyWorkingHours = async (
@@ -98,7 +115,8 @@ const verifyWorkingHours = async (
 const verifyNoAnotherMeeting = async (
   userId: number,
   newMeetingStart: number,
-  newMeetingEnd: number
+  newMeetingEnd: number,
+  isCreator = false
 ) => {
   const userMeetings = await getUserAcceptedMeetings(userId)
 
@@ -111,10 +129,13 @@ const verifyNoAnotherMeeting = async (
         endNewMeeting: newMeetingEnd,
       })
     ) {
-      throw new ErrorWithStatus(
-        'Meeting overlaps with another user meeting',
-        400
-      )
+      if (isCreator) {
+        throw new ErrorWithStatus(
+          'You already have another meeting at this time',
+          400
+        )
+      }
+      throw new ErrorWithStatus('Meeting overlaps with another meeting', 400)
     }
   })
 }
@@ -147,7 +168,12 @@ const verifyMeetingTime = async ({
   }
 
   await verifyNoAnotherMeeting(invitedUser.id, newMeetingStart, newMeetingEnd)
-  await verifyNoAnotherMeeting(creatorUser.id, newMeetingStart, newMeetingEnd)
+  await verifyNoAnotherMeeting(
+    creatorUser.id,
+    newMeetingStart,
+    newMeetingEnd,
+    true
+  )
 }
 
 const createMeetingTwoUsers = async (
@@ -213,7 +239,8 @@ const createMeetingTwoUsers = async (
 export const meetingsService = {
   createMeetingTwoUsers,
   getUserAcceptedMeetings,
-  getSpecialistMeetings,
   getUserUpcomingMeetings,
   getUserHistoryMeetings,
+  updateMeetingStatus,
+  isUserPartOfMeeting,
 }

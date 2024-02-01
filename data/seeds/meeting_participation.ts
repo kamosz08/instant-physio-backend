@@ -10,5 +10,7 @@ export async function seed(knex: Knex): Promise<void> {
     { user_id: 3, meeting_id: 1, status: 'accepted' },
     { user_id: 5, meeting_id: 2, status: 'accepted' },
     { user_id: 3, meeting_id: 2, status: 'accepted' },
+    { user_id: 5, meeting_id: 3, status: 'accepted' },
+    { user_id: 6, meeting_id: 3, status: 'accepted' },
   ])
 }

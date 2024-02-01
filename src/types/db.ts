@@ -41,7 +41,7 @@ export interface Meeting {
 export interface MeetingParticipation {
   user_id: number
   meeting_id: number
-  status: 'invited' | 'accepted' | 'denied'
+  status: 'invited' | 'accepted' | 'denied' | 'canceled'
 }
 
 export interface UserSpecialization {

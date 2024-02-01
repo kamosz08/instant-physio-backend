@@ -19,6 +19,12 @@ export async function seed(knex: Knex): Promise<void> {
       start_time: formatDateToDB(new Date(2024, 0, 20, 10, 0)),
       end_time: formatDateToDB(new Date(2024, 0, 20, 11, 0)),
     },
+    {
+      id: 3,
+      creator_id: 5,
+      start_time: formatDateToDB(new Date(2024, 8, 20, 10, 0)),
+      end_time: formatDateToDB(new Date(2024, 8, 20, 11, 0)),
+    },
   ]
   // Inserts seed entries
   await knex('meeting').insert(meetings)

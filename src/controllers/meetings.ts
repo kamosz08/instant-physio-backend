@@ -41,6 +41,37 @@ const save: RequestHandler = async (req, res, next) => {
   }
 }
 
+const updateMeetingStatus: RequestHandler = async (req, res, next) => {
+  try {
+    const meetingId = Number(req.params.meetingId)
+    if (!req.params.meetingId || Number.isNaN(meetingId)) {
+      throw new ErrorWithStatus('Wrong meeting id', 400)
+    }
+    const { status } = req.body
+    if (!status || status !== 'canceled') {
+      throw new ErrorWithStatus('Wrong request payload', 400)
+    }
+    const authenticatedUser = req.user as User
+    authenticatedUser.password = undefined
+    const isPartOfMeeting = await meetingsService.isUserPartOfMeeting({
+      meetingId,
+      userId: authenticatedUser.id,
+    })
+    if (!isPartOfMeeting) {
+      throw new ErrorWithStatus(
+        'You are not allowed to update meeting you are not part of',
+        403
+      )
+    }
+    await meetingsService.updateMeetingStatus(meetingId, 'canceled')
+
+    res.status(201).json()
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const meetingsController = {
   save,
+  updateMeetingStatus,
 }

@@ -4,16 +4,13 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     ports:
       - 8000:8000
-    volumes:
-      - .:/app
-      - '/app/node_modules'
     depends_on:
       - mysql_server
       - redis
-    command: sh -c './wait-for-it.sh -t 0 mysql_server:3306 -- npm run start:dev'
+    command: sh -c './wait-for-it.sh -t 0 mysql_server:3306 -- npm run start'
 
   redis:
     image: redis

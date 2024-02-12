@@ -36,7 +36,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 3,
       name: 'Dillon Roy',
       username: 'test-user',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2',
       type: 'user',
       status: 'active',
       avatar: null,
@@ -47,7 +47,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 4,
       name: 'Ehsan Harvey',
       username: 'testadmin@example.com',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'admin',
       status: 'active',
       avatar: null,
@@ -58,7 +58,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 5,
       name: 'Haris Winters',
       username: 'testspecialist@example.com',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/strength-1.png',
@@ -69,7 +69,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 6,
       name: 'Ajay Wiggins',
       username: 'test2@example.com',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'user',
       status: 'active',
       avatar: null,
@@ -80,7 +80,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 7,
       name: 'Adam Jarvis',
       username: 'test-specialist',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/strength-2.png',
@@ -91,7 +91,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 8,
       name: 'Eve Leach',
       username: 'test-specialist2',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/all-4.png',
@@ -102,7 +102,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 9,
       name: 'Kasey Mccarthy',
       username: 'test-specialist3',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/strength-3.png',
@@ -113,7 +113,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 10,
       name: 'Coral Hardy',
       username: 'test-specialist4',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/all-5.png',
@@ -124,7 +124,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 11,
       name: 'Harvey Sykes',
       username: 'test-specialist5',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/all-1.png',
@@ -135,7 +135,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 12,
       name: 'Tariq Crane',
       username: 'test-specialist6',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/yoga-1.png',
@@ -146,7 +146,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 13,
       name: 'Mikolaj Snow',
       username: 'test-specialist7',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/yoga-2.png',
@@ -157,7 +157,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 14,
       name: 'Oliwier Riddle',
       username: 'test-specialist8',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/all-2.png',
@@ -168,7 +168,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 15,
       name: 'Jakob Riley',
       username: 'test-specialist9',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/all-3.png',
@@ -179,7 +179,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 16,
       name: 'Felix Green',
       username: 'test-specialist10',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/yoga-3.png',
@@ -190,7 +190,7 @@ export async function seed(knex: Knex): Promise<void> {
       id: 17,
       name: 'Junaid Moreno',
       username: 'test-specialist11',
-      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLZayzJjGMk0T2', //test
+      password: '$2b$10$389oLIff5a9GpYpuCzL7CehUYYoE4x9sNLyFrnMYLYayzJjDMk0T2',
       type: 'specialist',
       status: 'active',
       avatar: 'uploads/yoga-4.png',

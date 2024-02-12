@@ -38,3 +38,19 @@ Existing features that this api provides:
 - Anyone can browse through specialists, read their descriptions
 - User can book a meeting with specialist
 
+## Instant Physio pet project client
+
+Same for both: Here will be app description same of client and BE, demo link, GIF? POtential future
+
+## How to run
+
+Instructions for client/BE
+
+## Tech stack
+Same for both: Here list of used technologies, link/screen to database schema
+
+## Deployment
+Instructions for client/BE
+
+## Conclusions
+Same for both

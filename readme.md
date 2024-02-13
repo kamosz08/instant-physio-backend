@@ -1,4 +1,4 @@
-## Instant Physio pet project client
+## Instant Physio pet project backend
 
 Idea for this project is to create a platform, which allows users to train from home with chosen personal coach.
 If we have technology where we can use AI to create such personal coaches, this platform could be used.
@@ -97,36 +97,3 @@ Deploy in EC2 (without docker):
 - Backend: SQL vs NoSQL - this project didn't have any vision, sql database is not very flexible so it took some migrations. That being said I still think this use case fits SQL
 
 - Correct approach for JWT tokens storage is to store acces_token in memory and refresh_token in safe cookie. This way we are protected from XSS and CSRF. [Best way to store JWT tokens](https://dev.to/cotter/localstorage-vs-cookies-all-you-need-to-know-about-storing-jwt-tokens-securely-in-the-front-end-15id)
-
-
-
-
-## App description
-
-Main concept is to provide personal physical training to users. There are three types of users:
-- user (basic)
-- specialist
-- admin
-
-Existing features that this api provides:
-- User can log in/register as specialist or normal user (patient) (authentication and authorization)
-- Specialist accounts need to be approved by admin
-- Anyone can browse through specialists, read their descriptions
-- User can book a meeting with specialist
-
-## Instant Physio pet project client
-
-Same for both: Here will be app description same of client and BE, demo link, GIF? POtential future
-
-## How to run
-
-Instructions for client/BE
-
-## Tech stack
-Same for both: Here list of used technologies, link/screen to database schema
-
-## Deployment
-Instructions for client/BE
-
-## Conclusions
-Same for both

@@ -11,7 +11,7 @@ describe('assign specialization to user', () => {
 
       const { statusCode } = await supertest(app)
         .post('/api/v1/users/5/specialization')
-        .send({ id: 1 })
+        .send({ id: 2 })
 
       expect(statusCode).toBe(401)
     })
@@ -26,7 +26,7 @@ describe('assign specialization to user', () => {
       const { statusCode } = await supertest(app)
         .post('/api/v1/users/5/specialization')
         .auth(accessToken, { type: 'bearer' })
-        .send({ id: 1 })
+        .send({ id: 2 })
 
       expect(statusCode).toBe(403)
     })
@@ -37,7 +37,7 @@ describe('assign specialization to user', () => {
       it('should return a 400 status', async () => {
         const app = createServer()
 
-        const {accessToken} = await loginAdmin(app)
+        const { accessToken } = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/5/specialization')
@@ -51,7 +51,7 @@ describe('assign specialization to user', () => {
       it('should return a 404 status', async () => {
         const app = createServer()
 
-        const {accessToken} = await loginAdmin(app)
+        const { accessToken } = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/5/specialization')
@@ -65,12 +65,12 @@ describe('assign specialization to user', () => {
       it('should return a 404 status', async () => {
         const app = createServer()
 
-        const {accessToken} = await loginAdmin(app)
+        const { accessToken } = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/505/specialization')
           .auth(accessToken, { type: 'bearer' })
-          .send({ id: 1 })
+          .send({ id: 2 })
 
         expect(statusCode).toBe(404)
       })
@@ -79,12 +79,12 @@ describe('assign specialization to user', () => {
       it('should return a 204 status', async () => {
         const app = createServer()
 
-        const {accessToken} = await loginAdmin(app)
+        const { accessToken } = await loginAdmin(app)
 
         const { statusCode } = await supertest(app)
           .post('/api/v1/users/7/specialization')
           .auth(accessToken, { type: 'bearer' })
-          .send({ id: 1 })
+          .send({ id: 2 })
 
         expect(statusCode).toBe(204)
       })

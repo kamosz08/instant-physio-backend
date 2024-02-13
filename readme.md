@@ -36,7 +36,7 @@ To work directly on mysql DB:
 
 ## Tests
 
-There are e2e api tests and complementary unit tests. E2E api tests don't use mocking/mock as little as possible, they run on actual database to test entire app flow. They also run on CI.
+There are e2e api tests and complementary unit tests. E2E api tests mock as little as possible, they run on real database that is fresh created, migrated and seeded. This is to test entire app flow. They also run on CI.
 
 To run e2e api tests locally:
 1. Setup local mysql database so that user with values from .env.test can connect

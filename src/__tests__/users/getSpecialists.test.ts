@@ -26,7 +26,7 @@ describe('get specialists', () => {
       const app = createServer()
 
       const { statusCode, body } = await supertest(app).get(
-        '/api/v1/users/specialists?search=five'
+        '/api/v1/users/specialists?search=harv'
       )
 
       expect(statusCode).toBe(200)
@@ -95,7 +95,7 @@ describe('get specialists', () => {
       const toDate = new Date(2023, 0, 1, 11, 0)
 
       const { statusCode, body } = await supertest(app).get(
-        `/api/v1/users/specialists?search=five&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
+        `/api/v1/users/specialists?search=harv&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
       )
 
       expect(statusCode).toBe(200)
@@ -115,7 +115,7 @@ describe('get specialists', () => {
       const toDate = new Date(2023, 0, 1, 17, 0)
 
       const { statusCode, body } = await supertest(app).get(
-        `/api/v1/users/specialists?search=five&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
+        `/api/v1/users/specialists?search=harv&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
       )
 
       expect(statusCode).toBe(200)
@@ -131,11 +131,11 @@ describe('get specialists', () => {
     it('should return a 200 status and no data', async () => {
       const app = createServer()
 
-      const fromDate = new Date(2023, 0, 1, 10, 0)
-      const toDate = new Date(2023, 0, 1, 11, 0)
+      const fromDate = new Date(2023, 0, 1, 7, 0)
+      const toDate = new Date(2023, 0, 1, 8, 0)
 
       const { statusCode, body } = await supertest(app).get(
-        `/api/v1/users/specialists?search=five&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
+        `/api/v1/users/specialists?search=harv&available[from]=${fromDate.toISOString()}&available[to]=${toDate.toISOString()}`
       )
 
       expect(statusCode).toBe(200)
@@ -152,7 +152,7 @@ describe('get specialists', () => {
       const app = createServer()
 
       const { statusCode, body } = await supertest(app).get(
-        '/api/v1/users/specialists?specialization=1&gender=female'
+        '/api/v1/users/specialists?specialization=4&gender=female'
       )
 
       expect(statusCode).toBe(200)
@@ -170,7 +170,7 @@ describe('get specialists', () => {
       const app = createServer()
 
       const { statusCode, body } = await supertest(app).get(
-        '/api/v1/users/specialists?specialization=1&search=five'
+        '/api/v1/users/specialists?specialization=1&search=harv'
       )
 
       expect(statusCode).toBe(200)

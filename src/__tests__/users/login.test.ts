@@ -10,7 +10,7 @@ describe('user login', () => {
       const { statusCode, body } = await supertest(app)
         .post('/api/v1/users/login')
         .send({
-          username: 'test@example.com',
+          username: 'test-user',
           password: 'test',
         })
 
@@ -18,7 +18,6 @@ describe('user login', () => {
 
       expect(body).toEqual({
         accessToken: expect.any(String),
-        refreshToken: expect.any(String),
         expireTime: expect.any(Number),
       })
     })
@@ -46,7 +45,7 @@ describe('user login', () => {
       const { statusCode } = await supertest(app)
         .post('/api/v1/users/login')
         .send({
-          username: 'test@example.com',
+          username: 'test-user',
           password: 'wrong',
         })
 

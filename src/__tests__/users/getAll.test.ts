@@ -33,7 +33,7 @@ describe('get all users', () => {
     it('should return a 200 status and data', async () => {
       const app = createServer()
 
-      const {accessToken} = await loginAdmin(app)
+      const { accessToken } = await loginAdmin(app)
 
       const { statusCode, body } = await supertest(app)
         .get('/api/v1/users/')

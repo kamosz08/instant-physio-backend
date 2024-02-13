@@ -28,7 +28,7 @@ const config: { [key: string]: Knex.Config } = {
     migrations: {
       directory: './data/migrations',
     },
-    seeds: { directory: './data/seeds' },
+    seeds: { directory: './data/seedsTest' },
   },
 
   ci: {
@@ -43,7 +43,7 @@ const config: { [key: string]: Knex.Config } = {
     migrations: {
       directory: './data/migrations',
     },
-    seeds: { directory: './data/seeds' },
+    seeds: { directory: './data/seedsTest' },
   },
 
   production: {

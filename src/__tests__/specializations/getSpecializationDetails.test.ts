@@ -7,7 +7,7 @@ describe('get specialization details', () => {
     const app = createServer()
 
     const { statusCode, body } = await supertest(app).get(
-      '/api/v1/specializations/some-name'
+      '/api/v1/specializations/strength'
     )
 
     expect(statusCode).toBe(200)

@@ -13,7 +13,7 @@ describe('buy credits', () => {
         .get('/api/v1/users/me')
         .auth(accessToken, { type: 'bearer' })
 
-      expect(getBody?.data?.credits).toEqual(0)
+      expect(getBody?.data?.credits).toEqual(120)
 
       const { statusCode, body } = await supertest(app)
         .post('/api/v1/users/buyCredits')
@@ -23,7 +23,7 @@ describe('buy credits', () => {
         })
 
       expect(statusCode).toEqual(200)
-      expect(body?.data?.credits).toEqual(10)
+      expect(body?.data?.credits).toEqual(130)
     })
   })
 
